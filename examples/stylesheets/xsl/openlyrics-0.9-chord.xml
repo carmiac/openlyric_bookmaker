@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chordNotation>
+  <notation id="english">
+    <!-- chromatic notes -->
+    <name class="C">C</name>
+    <name class="C#">C♯</name>
+    <name class="Db">D♭</name>
+    <name class="D">D</name>
+    <name class="D#">D♯</name>
+    <name class="Eb">E♭</name>
+    <name class="E">E</name>
+    <name class="F">F</name>
+    <name class="F#">F♯</name>
+    <name class="Gb">G♭</name>
+    <name class="G">G</name>
+    <name class="G#">G♯</name>
+    <name class="Ab">A♭</name>
+    <name class="A">A</name>
+    <name class="A#">A♯</name>
+    <name class="Bb">B♭</name>
+    <name class="B">B</name>
+    <!-- supporting theoretical keys -->
+    <name class="E#">E♯</name>
+    <name class="B#">B♯</name>
+    <name class="Fx">F𝄪</name>
+    <name class="Cx">C𝄪</name>
+    <name class="Gx">G𝄪</name>
+    <name class="Cb">C♭</name>
+    <name class="Fb">F♭</name>
+  </notation>
+  <notation id="english-b">
+    <!-- chromatic notes -->
+    <name class="C">C</name>
+    <name class="C#">C♯</name>
+    <name class="Db">D♭</name>
+    <name class="D">D</name>
+    <name class="D#">D♯</name>
+    <name class="Eb">E♭</name>
+    <name class="E">E</name>
+    <name class="F">F</name>
+    <name class="F#">F♯</name>
+    <name class="Gb">G♭</name>
+    <name class="G">G</name>
+    <name class="G#">G♯</name>
+    <name class="Ab">A♭</name>
+    <name class="A">A</name>
+    <name class="A#">A♯</name>
+    <name class="Bb">B</name>
+    <name class="B">H</name>
+    <!-- supporting theoretical keys -->
+    <name class="E#">E♯</name>
+    <name class="B#">H♯</name>
+    <name class="Fx">F𝄪</name>
+    <name class="Cx">C𝄪</name>
+    <name class="Gx">G𝄪</name>
+    <name class="Cb">C♭</name>
+    <name class="Fb">F♭</name>
+  </notation>
+  <notation id="german">
+    <!-- chromatic notes -->
+    <name class="C">C</name>
+    <name class="C#">Cis</name>
+    <name class="Db">Des</name>
+    <name class="D">D</name>
+    <name class="D#">Dis</name>
+    <name class="Eb">Es</name>
+    <name class="E">E</name>
+    <name class="F">F</name>
+    <name class="F#">Fis</name>
+    <name class="Gb">Ges</name>
+    <name class="G">G</name>
+    <name class="G#">Gis</name>
+    <name class="Ab">As</name>
+    <name class="A">A</name>
+    <name class="A#">Ais</name>
+    <name class="Bb">B</name>
+    <name class="B">H</name>
+    <!-- supporting theoretical keys -->
+    <name class="E#">Eis</name>
+    <name class="B#">His</name>
+    <name class="Fx">Fisis</name>
+    <name class="Cx">Cisis</name>
+    <name class="Gx">Gisis</name>
+    <name class="Cb">Ces</name>
+    <name class="Fb">Fes</name>
+ </notation>
+ <notation id="dutch">
+    <!-- chromatic notes -->
+    <name class="C">C</name>
+    <name class="C#">Cis</name>
+    <name class="Db">Des</name>
+    <name class="D">D</name>
+    <name class="D#">Dis</name>
+    <name class="Eb">Es</name>
+    <name class="E">E</name>
+    <name class="F">F</name>
+    <name class="F#">Fis</name>
+    <name class="Gb">Ges</name>
+    <name class="G">G</name>
+    <name class="G#">Gis</name>
+    <name class="Ab">As</name>
+    <name class="A">A</name>
+    <name class="A#">Ais</name>
+    <name class="Bb">Bes</name>
+    <name class="B">B</name>
+    <!-- supporting theoretical keys -->
+    <name class="E#">Eis</name>
+    <name class="B#">Bis</name>
+    <name class="Fx">Fisis</name>
+    <name class="Cx">Cisis</name>
+    <name class="Gx">Gisis</name>
+    <name class="Cb">Ces</name>
+    <name class="Fb">Fes</name>
+  </notation>
+  <notation id="hungarian">
+    <!-- chromatic notes -->
+    <name class="C">C</name>
+    <name class="C#">Cisz</name>
+    <name class="Db">Desz</name>
+    <name class="D">D</name>
+    <name class="D#">Disz</name>
+    <name class="Eb">Esz</name>
+    <name class="E">E</name>
+    <name class="F">F</name>
+    <name class="F#">Fisz</name>
+    <name class="Gb">Gesz</name>
+    <name class="G">G</name>
+    <name class="G#">Gisz</name>
+    <name class="Ab">Asz</name>
+    <name class="A">A</name>
+    <name class="A#">Aisz</name>
+    <name class="Bb">B</name>
+    <name class="B">H</name>
+    <!-- supporting theoretical keys -->
+    <name class="E#">Eisz</name>
+    <name class="B#">Hisz</name>
+    <name class="Fx">Fiszisz</name>
+    <name class="Cx">Ciszisz</name>
+    <name class="Gx">Giszisz</name>
+    <name class="Cb">Cesz</name>
+    <name class="Fb">Fesz</name>
+  </notation>
+  <notation id="neolatin">
+    <!-- chromatic notes -->
+    <name class="C">Do</name>
+    <name class="C#">Do♯</name>
+    <name class="Db">Re♭</name>
+    <name class="D">Re</name>
+    <name class="D#">Re♯</name>
+    <name class="Eb">Mi♭</name>
+    <name class="E">Mi</name>
+    <name class="F">Fa</name>
+    <name class="F#">Fa♯</name>
+    <name class="Gb">Sol♭</name>
+    <name class="G">Sol</name>
+    <name class="G#">Sol♯</name>
+    <name class="Ab">La♭</name>
+    <name class="A">La</name>
+    <name class="A#">La♯</name>
+    <name class="Bb">Si♭</name>
+    <name class="B">Si</name>
+    <!-- supporting theoretical keys -->
+    <name class="E#">Mi♯</name>
+    <name class="B#">Si♯</name>
+    <name class="Fx">Fa𝄪</name>
+    <name class="Cx">Do𝄪</name>
+    <name class="Gx">Sol𝄪</name>
+    <name class="Cb">Do♭</name>
+    <name class="Fb">Fa♭</name>
+  </notation>
+
+  <!-- 2 note chords -->
+  <structure id="5" shorthand="power">5</structure><!-- omit3 -->
+  <!-- 3 note chords -->
+  <structure id="3-5" shorthand=""></structure>
+  <structure id="m3-5" shorthand="min">m</structure><!-- - --><!-- min -->
+  <structure id="3-a5" shorthand="aug">+</structure><!-- 5♯ --><!-- (♯5) -->
+  <structure id="m3-d5" shorthand="dim">m,5♭</structure><!-- m(♭5) -->
+  <!-- 4 note chords -->
+  <structure id="3-5-m7" shorthand="dom7">7</structure>
+  <structure id="3-5-7" shorthand="maj7">Δ</structure><!-- Maj7 --><!-- M7 --><!-- Δ7 -->
+  <structure id="m3-5-m7" shorthand="min7">m7</structure><!-- -7 --><!-- min7 -->
+  <structure id="m3-d5-d7" shorthand="dim7">ⵔ</structure><!-- dim7 --><!-- ⵔ7 -->
+  <structure id="m3-d5-m7" shorthand="halfdim7">ⵁ</structure><!-- m7,5♭ --><!-- m7(♭5) --><!-- -7(♭5) --><!-- ⵁ7 --><!-- halfdim -->
+  <structure id="m3-5-7" shorthand="minmaj7">mΔ</structure><!-- mMaj7 --><!-- mM7 --><!-- -M7 --><!-- -Δ --><!-- -Δ7 -->
+  <structure id="3-a5-7" shorthand="augmaj7">+Δ</structure><!-- Maj7(♯5) --><!-- +Maj7 --><!-- +M7 --><!-- +Δ7 -->
+  <structure id="3-d5-m7">7,5♭</structure><!-- 7(♭5) -->
+  <structure id="3-a5-m7" shorthand="aug7">+7</structure><!-- 7,5♯ --><!-- 7(♯5) -->
+  <structure id="m3-d5-7">mΔ,5♭</structure><!-- mΔ(5♭) --><!-- mMaj7(♭5) --><!-- mM7(♭5) --><!-- -Δ7(♭5) -->
+  <structure id="3-d5-7">Δ,5♭</structure><!-- Δ7(♭5) --><!-- Maj7(♭5) --><!-- M7(♭5) -->
+  <structure id="3-5-6" shorthand="maj6">6</structure><!-- M6 --><!-- add6 -->
+  <structure id="3-5-m6" shorthand="maj6b">6♭</structure><!-- (♭6) -->
+  <structure id="m3-5-6" shorthand="min6">m6</structure><!-- m,add6 -->
+  <structure id="m3-5-m6" shorthand="min6b">m6♭</structure><!-- m(♭6) -->
+  <!-- 5 note chords -->
+  <structure id="3-5-m7-9" shorthand="dom9">9</structure><!-- 7,9 -->
+  <structure id="3-5-m7-m9" shorthand="dom9b">7,9♭</structure><!-- 7(♭9) -->
+  <structure id="3-5-7-9" shorthand="maj9">Δ9</structure><!-- Maj9 --><!-- M9 -->
+  <structure id="m3-5-m7-9" shorthand="min9">m9</structure><!-- m7,9 --><!-- -9 --><!-- min9 -->
+  <structure id="m3-5-7-9" shorthand="minmaj9">mΔ9</structure><!-- mMaj9 --><!-- mM9 --><!-- -M9 --><!-- -Δ9 -->
+  <structure id="3-a5-7-9">+Δ9</structure><!-- Maj9(♯5) --><!-- +Maj9 --><!-- +M9 -->
+  <structure id="3-a5-m7-9" shorthand="aug9">+9</structure><!-- +7,9 --><!-- 9,5♯ --><!-- 9(♯5) -->
+  <structure id="m3-d5-m7-9" shorthand="halfdim9">ⵁ9</structure><!-- m9,5♭ --><!-- m9(♭5) --><!-- -9(♭5) --><!-- halfdim9 -->
+  <structure id="m3-d5-m7-m9">ⵁ9♭</structure><!-- ⵁ(♭9) --><!-- m7,9♭,5♭ --><!-- m7(♭9,♭5) --><!-- -7(♭9,♭5) --><!-- halfdim(♭9) -->
+  <structure id="m3-d5-d7-9">°9</structure><!-- dim9 -->
+  <structure id="m3-d5-d7-m9">°9♭</structure><!-- °(♭9) --><!-- dim7,9♭ --><!-- °7,9♭ -->
+  <structure id="3-5-m7-m10">7,10♭</structure><!-- 7(♭10) -->
+  <!-- 6 note chords -->
+  <structure id="3-5-m7-9-11">11</structure>
+  <structure id="3-5-7-9-11">Δ11</structure><!-- Maj11 --><!-- M11 -->
+  <structure id="m3-5-m7-9-11">m11</structure><!-- -11 --><!-- min11 -->
+  <structure id="m3-5-7-9-11">mΔ11</structure><!-- mMaj11 --><!-- mM11 --><!-- -M11 --><!-- -Δ11 -->
+  <structure id="3-5-m7-9-a11">11♯</structure>
+  <structure id="3-5-7-9-a11">Δ11♯</structure><!-- Δ(♯11) --><!-- Maj(♯11) --><!-- M(♯11) -->
+  <structure id="m3-5-m7-9-a11">m11♯</structure><!-- m(♯11) --><!-- -(♯11) --><!-- min(♯11) -->
+  <structure id="m3-5-7-9-a11">mΔ11♯</structure><!-- mΔ(♯11) --><!-- mMaj(♯11) --><!-- mM(♯11) --><!-- -M(♯11) --><!-- -Δ(♯11) -->
+  <structure id="3-a5-7-9-11">+Δ11</structure><!-- Maj11(♯5) --><!-- +Maj11 --><!-- +M11 -->
+  <structure id="3-a5-m7-9-11">+11</structure><!-- 11,5♯ --><!-- 11(♯5) -->
+  <structure id="m3-d5-m7-m9-11">ⵁ11</structure><!-- m11,5♭ --><!-- m11(♭5) --><!-- -11(♭5) --><!-- halfdim11 -->
+  <structure id="m3-d5-d7-m9-d11">°11</structure><!-- dim11 -->
+  <!-- 7 note chords -->
+  <structure id="3-5-m7-9-11-13">13</structure>
+  <structure id="3-5-7-9-11-13">Δ13</structure><!-- Maj13 --><!-- M13 -->
+  <structure id="m3-5-m7-9-11-13">m13</structure><!-- -13 --><!-- min13 -->
+  <structure id="m3-5-7-9-11-13">mΔ13</structure><!-- mMaj13 --><!-- mM13 --><!-- -M13 --><!-- -Δ13 -->
+  <structure id="3-5-m7-9-a11-13">13(♯11)</structure>
+  <structure id="3-5-7-9-a11-13">Δ13(♯11)</structure><!-- Maj13(♯11) --><!-- M13(♯11) -->
+  <structure id="m3-5-m7-9-a11-13">m13(♯11)</structure><!-- -13(♯11) --><!-- min13(♯11) -->
+  <structure id="m3-5-7-9-a11-13">mΔ13(♯11)</structure><!-- mMaj13(♯11) --><!-- mM13(♯11) --><!-- -M13(♯11) --><!-- -Δ13(♯11) -->
+  <structure id="3-a5-7-9-11-13">+Δ13</structure><!-- Maj13(♯5) --><!-- +Maj13 --><!-- +M13 -->
+  <structure id="3-a5-m7-9-11-13">+13</structure><!-- 13,5♯ --><!-- 13(♯5) -->
+  <structure id="m3-d5-m7-m9-11-13">ⵁ13</structure><!-- m13,5♭ --><!-- m13(♭5) --><!-- -13(♭5) --><!-- halfdim13 -->
+  <!-- Figured 3 note chords -->
+  <structure id="4-5" shorthand="sus4">4</structure><!-- sus4 --><!-- sus -->
+  <structure id="2-5" shorthand="sus2">2</structure><!-- sus2 -->
+  <!-- Figured 4 note chords -->
+  <structure id="3-5-m7-13">7,6</structure><!-- 7(add13) --><!-- 7(add6) -->
+  <structure id="3-5-6-9">6,9</structure><!-- 6(add9) -->
+  <structure id="3-5-9" shorthand="add9">add9</structure>
+  <structure id="m3-5-9">m(add9)</structure>
+  <structure id="3-a5-9">+add9</structure><!-- (♯5)add9 -->
+  <structure id="4-5-6">6,4</structure><!-- 6(sus4) -->
+  <structure id="2-5-6">6,2</structure><!-- 6(sus2) -->
+  <structure id="4-5-m6">6♭,4</structure><!-- 6♭(sus4) --><!-- (♭6)sus4 -->
+  <structure id="2-5-m6">6♭,2</structure><!-- 6♭(sus2) --><!-- (♭6)sus2 -->
+  <structure id="4-5-m7">7,4</structure><!-- 7sus4 -->
+  <structure id="2-5-m7">7,2</structure><!-- 7sus2 -->
+  <structure id="4-5-7">Δ,4</structure><!-- Maj7,4 --><!-- M7,4 --><!-- Δ7,4 --><!-- Δsus4 --><!-- M7sus4 -->
+  <structure id="2-5-7">Δ,2</structure><!-- Maj7,2 --><!-- M7,2 --><!-- Δ7,2 --><!-- Δsus2 --><!-- M7sus2 -->
+  <structure id="4-a5-7">+Δ,4</structure><!-- Maj7(♯5)4 --><!-- +Maj7,4 --><!-- +M7,4 --><!-- +Δ7,4 --><!-- Maj7(♯5)4sus4 --><!-- +Maj7,4sus4 --><!-- +M7,4sus4 --><!-- +Δ7,4sus4 -->
+  <structure id="2-a5-7">+Δ,2</structure><!-- Maj7(♯5)2 --><!-- +Maj7,2 --><!-- +M7,2 --><!-- +Δ7,2 --><!-- Maj7(♯5)2sus2 --><!-- +Maj7,2sus2 --><!-- +M7,2sus2 --><!-- +Δ7,2sus2 -->
+  <structure id="4-d5-m7">ⵁ,4</structure><!-- 7,5♭,4 --><!-- 7(♭5)4 --><!-- ⵁ7,4 --><!-- halfdim,4 --><!-- 7,5♭,4sus4 --><!-- 7(♭5)4sus4 --><!-- ⵁ7,4sus4 --><!-- halfdim,4sus4 -->
+  <structure id="2-d5-m7">ⵁ,2</structure><!-- 7,5♭,2 --><!-- 7(♭5)2 --><!-- ⵁ7,2 --><!-- halfdim,2 --><!-- 7,5♭,2sus2 --><!-- 7(♭5)2sus2 --><!-- ⵁ7,2sus2 --><!-- halfdim,2sus2 -->
+  <structure id="4-d5-d7">ⵔ,4</structure><!-- dim7,4 --><!-- ⵔ7,4 --><!-- ⵔ(sus4) --><!-- dim7(sus4) --><!-- ⵔ7(sus4) -->
+  <structure id="2-d5-d7">ⵔ,2</structure><!-- dim7,2 --><!-- ⵔ7,2 --><!-- ⵔ(sus2) --><!-- dim7(sus2) --><!-- ⵔ7(sus2) -->
+  <structure id="4-d5-7">Δ,5♭,4</structure><!-- Δ7(♭5)4 --><!-- Maj7(♭5)4 --><!-- M7(♭5)4 --><!-- Δ7(♭5)4sus4 --><!-- Maj7(♭5)4sus4 --><!-- M7(♭5)4sus4 -->
+  <structure id="2-d5-7">Δ,5♭,2</structure><!-- Δ7(♭5)2 --><!-- Maj7(♭5)2 --><!-- M7(♭5)2 --><!-- Δ7(♭5)2sus2 --><!-- Maj7(♭5)2sus2 --><!-- M7(♭5)2sus2 -->
+  <structure id="4-5-m7-13">7,6,4</structure><!-- 7(add13)4 --><!-- 7(add6)4 --><!-- 7,6sus4 --><!-- 7(add13)sus4 --><!-- 7(add6)sus4 -->
+  <structure id="2-5-m7-13">7,6,2</structure><!-- 7(add13)2 --><!-- 7(add6)2 --><!-- 7,6sus2 --><!-- 7(add13)sus2 --><!-- 7(add6)sus2 -->
+  <!-- Figured 5 note chords -->
+  <structure id="4-5-m7-9">9,4</structure><!-- 9sus4 -->
+  <structure id="4-5-m7-m9">7,9♭,4</structure><!-- 7(♭9)4 --><!-- 7,9♭,sus4 --><!-- 7(♭9)sus4 -->
+  <structure id="4-5-7-9">Δ9,4</structure><!-- Δ9sus4 --><!-- Maj9,4 --><!-- M9,4 --><!-- Maj9sus4 --><!-- M9sus4 -->
+  <structure id="4-a5-7-9">+Δ9,4</structure><!-- +Δ9sus4 --><!-- Maj9(♯5)4 --><!-- +M9,4 --><!-- +M9sus4 --><!-- +Maj9,4 -->
+  <structure id="4-a5-m7-9">+9,4</structure><!-- +9sus4 --><!-- 9(♯5)sus4 -->
+
+</chordNotation>
