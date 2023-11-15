@@ -1,0 +1,49 @@
+nav.hamburger button {
+	background: none;
+	cursor: pointer;
+	border: none;
+}
+
+#mypopover {
+	inline-size: 100%;
+    block-size: 100%;
+    background-color: white;
+    color: black;
+    overflow-y: auto;
+    padding-block: 8px;
+    padding-inline: 16px;
+    box-sizing: border-box;
+    /*transition: left 0.18s ease-in-out 0s;*/
+    border: none;
+    border-inline-end: 1px solid #f0f0f0;
+}
+
+#mypopover::backdrop {
+	background-color: black;
+	transition: opacity 0.14s ease-in-out 0s;
+    opacity: 0.6;
+}
+
+#mypopover ul {
+	padding-block: 0px;
+	padding-inline: 14px;
+	line-height: 1.5em;
+}
+
+#mypopover h2 {
+	text-align: center;
+	inline-size: 100%;
+	margin: 0px;
+}
+
+#mypopover button {
+	position: absolute;
+    inset-inline-start: 8px;
+    inset-block-start: 12px;
+}
+
+@media (min-width: 400px) {
+	#mypopover {
+		inline-size: 300px;
+	}
+}

@@ -32,6 +32,14 @@ The configuration file is a TOML file.  The default configuration file is `confi
 An example configuration file is available in [examples/example_config.toml](examples/example_config.toml).
 
 
-## TODO
+## Generating HTML
 
-* HTML output
+Step 1: modify `examples/stylesheets.openlyrics.xsl`, adding any songs into the `<ul>` list within the `<nav>` element.
+
+Step 2: run this from the command line:
+
+```bash
+./build-html.sh
+```
+
+Step 3: open any of the `.html` files in `examples/songs/`
