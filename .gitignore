@@ -42,3 +42,7 @@ venv.bak/
 # Build and output
 examples/build/
 examples/output/
+.vercel
+
+# macos cruft
+.DS_Store

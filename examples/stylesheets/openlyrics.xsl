@@ -54,8 +54,27 @@
         <title><xsl:value-of select="ol:song/ol:properties/ol:titles/ol:title[1]/text()"/></title>
         <meta charset="UTF-8" />
         <link rel="stylesheet" href="../stylesheets/css/html.css" />
+        <link rel="stylesheet" href="../stylesheets/css/hamburger.css" />
       </head>
       <body>
+
+        <nav class="hamburger">
+          <button popovertarget="mypopover"> ☰ </button>
+          <div id="mypopover" popover="auto">
+           
+            <button popovertarget="mypopover" popovertargetaction="hide"> ☰ </button>
+            <h2> Songs </h2>
+           
+            <ul>
+              <li> <a href="./amazing_grace.html">Amazing Grace</a> </li>
+              <li> <a href="./barretts_privateers.html">Barretts Privateers</a> </li>
+              <li> <a href="./leave_her_johnny.html">Leave her Johnny</a> </li>
+              <li> <a href="./mary_ellen_carter.html">Mary Ellen Carter</a> </li>
+              <li> <a href="./northwest_passage.html">Northwest Passage</a> </li>
+            </ul>
+          </div>
+        </nav>
+
         <xsl:apply-templates/>
       </body>
     </html>
