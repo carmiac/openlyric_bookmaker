@@ -2,18 +2,21 @@
 """Tool for creating lyric books from OpenLyrics XML files."""
 
 import argparse
-import tomli
-from pathlib import Path
 import logging
-import shutil
-from os import listdir
-import subprocess
-import jinja2
-import xml.etree.ElementTree as ET
 import re
+import shutil
+import subprocess
+import xml.etree.ElementTree as ET
+from os import listdir
+from pathlib import Path
+
+import jinja2
+import tomli
 
 
 class SongBookMaker:
+    """Class for creating songbooks from OpenLyrics XML files."""
+
     def __init__(
         self,
         songbook_config: dict,
@@ -23,6 +26,7 @@ class SongBookMaker:
         base_path: Path = None,  # base path for input files that are not absolute
         clean: bool = False,
     ) -> None:
+        """Create a SongBookMaker object."""
         self.songbook_config = songbook_config
         self.output_dir = output_dir
         self.output_formats = output_formats
@@ -44,28 +48,29 @@ class SongBookMaker:
                     section["files"].sort(key=lambda f: f.name)
                 else:
                     logging.error(
-                        f"Unknown sort method for section {name}: {section['sort']}"
+                        f'Unknown sort method for section {name}: {section["sort"]}'
                     )
 
-        logging.debug(f"Songbook Config")
+        logging.debug("Songbook Config")
         for k, v in self.songbook_config.items():
-            if k not in ["files", "sections"]:
+            if k not in ("files", "sections"):
                 logging.debug(f"  {k}: {v}")
         logging.debug(f"Output Directory: {self.output_dir}")
         logging.debug(f"Base Path: {self.base_path}")
-        logging.debug(f"Sections")
+        logging.debug("Sections")
         for name, settings in self.sections.items():
             logging.debug(f"  {name}:")
             for k, v in settings.items():
                 logging.debug(f"    {k}: {v}")
 
-        logging.debug(f"Output Formats")
+        logging.debug("Output Formats")
         for name, settings in self.output_formats.items():
             logging.debug(f"  {name}:")
             for k, v in settings.items():
                 logging.debug(f"    {k}: {v}")
 
     def make_output(self):
+        """Create output in the specified formats."""
         # Clean output directory
         if self.clean:
             logging.info(
@@ -87,11 +92,22 @@ class SongBookMaker:
             elif format_config["type"] == "epub":
                 self.make_epub_output(format_config)
             else:
-                raise ValueError(f"Invalid output format: {format_config['type']}")
+                raise ValueError(f'Invalid output format: {format_config["type"]}')
+
+    def _get_song_title(self, song_file: Path) -> str:
+        """Get the title of a song from the XML file."""
+        with song_file.open("r") as f:
+            xml = f.read()
+        ns = {"ol": "http://openlyrics.info/namespace/2009/song"}
+        xml_tree = ET.fromstring(xml)
+        title = xml_tree.find(".//ol:title", ns)
+        if title is not None:
+            return title.text
+        else:
+            return song_file.stem
 
     def make_html_output(self, html_config: dict):
         """Create HTML output."""
-        # Create output directory
         output_dir = self.output_dir.joinpath(html_config["output_dir"])
         output_dir.mkdir(parents=True, exist_ok=True)
         logging.info(
@@ -100,7 +116,6 @@ class SongBookMaker:
 
         # Copy stylesheets. These are optional, and are a list of files and directories.
         # Directories are copied recursively, preserving the directory structure.
-
         if "stylesheets" in html_config:
             for stylesheet in html_config["stylesheets"]:
                 logging.debug(f"Copying stylesheet {stylesheet}")
@@ -119,27 +134,28 @@ class SongBookMaker:
         # Copy images. These are optional, and are a list of files and directories.
         # Directories are copied recursively, preserving the directory structure.
         if "image_dir" in html_config:
-            for image in html_config["image_dir"]:
-                logging.debug(f"Copying image {image}")
-                image = Path(image)
-                if self.base_path and not image.is_absolute():
-                    image = self.base_path.joinpath(image)
-                if image.is_dir():
-                    shutil.copytree(
-                        image,
-                        output_dir.joinpath(image.name),
-                        dirs_exist_ok=True,
-                    )
-                else:
-                    shutil.copy(image, output_dir)
+            shutil.copytree(
+                self.base_path.joinpath(html_config["image_dir"]),
+                output_dir.joinpath(html_config["image_dir"]),
+                dirs_exist_ok=True,
+            )
         # Create HTML files from input files for each section using xsltproc
+        # Also, build a list of sections with the songs names and their files for use
+        # in the templates.
+        section_files = {}
         for section_name, section in self.sections.items():
+            section_files[section_name] = []
             logging.debug(f"Creating HTML files for section {section_name}")
-            section_output_dir = output_dir.joinpath(section_name)
-            section_output_dir.mkdir(parents=True, exist_ok=True)
             for song_file in section["files"]:
                 logging.debug(f"Creating HTML file for {song_file}")
-                output_file = section_output_dir.joinpath(song_file.stem + ".html")
+                output_file = output_dir.joinpath("songs", song_file.stem + ".html")
+                section_files[section_name].append(
+                    {
+                        "title": self._get_song_title(song_file),
+                        "file": song_file,
+                        "output_file": output_file.relative_to(output_dir),
+                    }
+                )
                 xsltproc_args = [
                     "xsltproc",
                     "--output",
@@ -153,12 +169,34 @@ class SongBookMaker:
                     raise RuntimeError(
                         f"xsltproc failed with return code {xsltproc_result.returncode}"
                     )
+        # Create the jinja2 variables for the template files
+        template_vars = (
+            html_config
+            | html_config.get("render_variables", {})
+            | self.songbook_config
+            | {"sections": section_files}
+        )
+        for var in template_vars:
+            logging.debug(f"Template variable {var}: {template_vars[var]}")
+
+        # Render all the templates from the template directory to the output directory.
+        template_dir = self.base_path.joinpath(html_config["template_dir"])
+        template_files = listdir(template_dir)
+        logging.debug(f"Template files: {template_files}")
+        template_files = [
+            Path(template_dir).joinpath(f)
+            for f in template_files
+            if f.endswith(".html")
+        ]
+        for template in template_files:
+            self._render_template(
+                template,
+                output_dir,
+                template_vars,
+            )
 
     def make_pdf_output(self, pdf_config: dict):
-        """Create PDF output.
-        This is done by formatting and joining several LaTeX files and then
-        running pdflatex on the result."""
-
+        """Create PDF output by processing the LaTeX files and then running pdflatex on the result."""
         # Create the output and build directories
         output_dir = self.output_dir.joinpath(pdf_config["output_dir"])
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -251,11 +289,9 @@ class SongBookMaker:
     def _render_template(self, template: str, build_dir: Path, variables: dict = None):
         """Render the given template and copy the result to the build directory."""
         # Load the template
-        template = Path(template)
         output_file = build_dir.joinpath(template.name)
         logging.debug(f"Rendering template {template} to {output_file}")
-        with open(template, "r") as template_file:
-            template = jinja2.Template(template_file.read())
+        template = jinja2.Template(Path(template).read_text())
 
         # Render the template
         try:
@@ -267,8 +303,7 @@ class SongBookMaker:
             return
 
         # Write the rendered template to the build directory
-        with open(output_file, "w") as output:
-            output.write(rendered)
+        output_file.write_text(rendered)
 
     def make_epub_output(self, epub_config: dict):
         """Create EPUB output, using tex4ebook to convert the LaTeX to HTML."""
@@ -379,7 +414,8 @@ class SongBookMaker:
         logging.debug(f"Creating SBD file in {build_dir}")
         # Create the SBD file from the input files.
         songfile = build_dir.joinpath(self.songfile)
-        with open(songfile, "w") as output:
+
+        with songfile.open("w") as output:
             # Add the sbd header from the render_variables, if present
             if "sbd_header" in config:
                 output.write(config["sbd_header"])
@@ -387,12 +423,16 @@ class SongBookMaker:
             # Add the section input files
             for section_name, section in self.sections.items():
                 output.write(
-                    r"\begin{songs}{"
-                    + section_name.replace(" ", "_")
-                    + "_idx"
-                    + ","
-                    + r"authoridx}"
-                    + "\n"
+                    "".join(
+                        [
+                            r"\begin{songs}{",
+                            section_name.replace(" ", "_"),
+                            "_idx",
+                            ",",
+                            r"authoridx}",
+                            "\n",
+                        ]
+                    )
                 )
                 output.write(f"\\songchapter{{{section_name}}}\n")
                 for input_file in section["files"]:
@@ -406,12 +446,10 @@ class SongBookMaker:
                 output.write(r"\end{songs}")
 
     def _xml_to_sbd(self, xml_string: str) -> str:
-        """Convert an XML string to an LaTeX songs entry.
-        This is done by parsing the XML and then converting it to LaTeX tags."""
-
+        """Convert an XML string to an LaTeX songs entry."""
         # First, parse the XML string into an XML tree.
-        # This is done by converting the string to bytes and then parsing it.
-        # This is necessary because the XML parser expects bytes, not a string.
+        # This is done by converting the string to bytes and then parsing it,
+        # because the XML parser expects bytes, not a string.
         xml_bytes = xml_string.encode("utf-8")
         xml_tree = ET.fromstring(xml_bytes)
 
@@ -472,15 +510,15 @@ class SongBookMaker:
             verse_order = song_header["verseOrder"].split()
         else:
             # Get all verse numbers
-            verse_order = []
-            for verse in xml_tree.findall(".//ol:verse", ns):
-                verse_order.append(verse.attrib["name"])
+            verse_order = [
+                verse.attrib["name"] for verse in xml_tree.findall(".//ol:verse", ns)
+            ]
         for verse_number in verse_order:
             if verse_number.lower().startswith("c"):
-                entry += f"\\beginchorus\n"
+                entry += "\\beginchorus\n"
             else:
-                entry += f"\\beginverse\n"
-            verse = xml_tree.find(f".//ol:verse[@name='{verse_number}']", ns)
+                entry += "\\beginverse\n"
+            verse = xml_tree.find(f'.//ol:verse[@name="{verse_number}"]', ns)
             # Each verse consists of one or more lines of text, which may be
             # interspersed with chords and other tags.
             lines = verse.findall(".//ol:lines", ns)
@@ -525,13 +563,13 @@ class SongBookMaker:
         index_file = sxd_file.with_suffix(".sbx")
         logging.debug(f"Creating index file for {sxd_file} to {index_file}")
         with open(sxd_file, "r") as sxd:
-            type = sxd.readline().strip()
-        if type.startswith("AUTHOR"):
+            index_type = sxd.readline().strip()
+        if index_type.startswith("AUTHOR"):
             self._make_latex_author_index(sxd_file, index_file)
-        elif type.startswith("TITLE"):
+        elif index_type.startswith("TITLE"):
             self._make_latex_title_index(sxd_file, index_file)
         else:
-            logging.error(f"Unknown index type {type} in {sxd_file}.")
+            logging.error(f"Unknown index type {index_type} in {sxd_file}.")
 
     def _make_latex_author_index(self, sxd_file: str, sbx_file: str):
         """Create an author index file (sbx_file) for the given SXD file."""
@@ -556,7 +594,7 @@ class SongBookMaker:
                 ]:
                     try:
                         first, last = name.rsplit(maxsplit=1)
-                    except:  # only one word in name
+                    except ValueError:  # only one name
                         entry = name.replace("~", " ").strip()
                     else:
                         entry = ", ".join([last.strip(), first.strip()]).replace(
@@ -621,7 +659,7 @@ class SongBookMaker:
                 except ValueError:  # only one word in title
                     pass
                 else:
-                    if begin in ["a", "an", "the", "A", "An", "The"]:
+                    if begin in ("a", "an", "the", "A", "An", "The"):
                         title = ", ".join([end, begin])
                 # capitalize just the first letter of the first word
                 title = title[0].upper() + title[1:]
@@ -663,17 +701,19 @@ class SongBookMaker:
                 f.write(endsection.format())  # close out final block
 
 
-def get_file_list(input: list[str | Path], base_path: Path = None) -> list[Path]:
+def get_file_list(infiles: list[str | Path], base_path: Path = None) -> list[Path]:
     """Given a list of files and directories, return a list of files.
+
     If a directory is given, all files in that directory are returned.
     If base_path is given, all input paths that are not absolute are
-    interpreted as relative to base_path."""
+    interpreted as relative to base_path.
+    """
     # Convert input to list of Path objects
-    input = [Path(f) for f in input]
+    infiles = [Path(f) for f in infiles]
     if base_path is not None:
-        input = [base_path.joinpath(f) if not f.is_absolute() else f for f in input]
+        infiles = [base_path.joinpath(f) if not f.is_absolute() else f for f in infiles]
     files = []
-    for f in input:
+    for f in infiles:
         if f.is_dir():
             files.extend([f.joinpath(file) for file in listdir(f)])
         else:
@@ -697,17 +737,17 @@ def load_config(config_file: str) -> dict:
 
     # Check that all output formats are valid
     format_type_options = {
-        "html": ["template", "output_dir", "output_file"],
+        "html": ["output_dir"],
         "pdf": ["output_dir", "output_file"],
         "epub": ["output_dir", "output_file"],
     }
     for format_name, settings in config["output_formats"].items():
         if settings["type"] not in format_type_options:
-            raise ValueError(f"Invalid output format: {settings['type']}")
+            raise ValueError(f'Invalid output format: {settings["type"]}')
         for field in format_type_options[settings["type"]]:
             if field not in settings:
                 raise ValueError(
-                    f"Missing required field for format_name: {settings['type']}: {field}"
+                    f'Missing required field for format_name: {settings["type"]}: {field}'
                 )
 
     return config

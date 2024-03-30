@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{title}}</title>
+</head>
+
+
+<body>
+    <p>{{intro_blurb}}</p>
+    <p>Special thanks to
+    <ul>
+        <li><b>The Authors</b> for creating the songs.</li>
+        <li><b>The Artists</b> for creating the music.</li>
+        <li><b>The Transcribers</b> for transcribing the music.</li>
+        <li><b>The Editors</b> for editing the transcriptions.</li>
+        <li><b>The Publishers</b> for publishing the music.</li>
+        <li><b>The Readers</b> for reading the music.</li>
+    </ul>
+    </p>
+    <p style="text-align:center;">Enjoy the music!</p>
+    <img src="images/frontcover.png" alt="Cover Image" style="width:100%">
+    {% if publisher %}
+    <p style="text-align:center;">Published by {{publisher}}</p>
+    {% endif %}
+    {% if publish_date %}
+    <p style="text-align:center;">Published on {{publish_date}}</p>
+    {% endif %}
+    {% if license and not license_url %}
+    <p style="text-align:center;">Licensed under {{license}}</p>
+    {% endif %}
+    {% if license_url %}
+    <p style="text-align:center;">Licensed under <a href="{{license_url}}">{{license}}</a></p>
+    {% endif %}
+
+</body>
+
+</html>
