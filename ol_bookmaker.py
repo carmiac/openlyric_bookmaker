@@ -1,7 +1,33 @@
 #!/usr/bin/env python3
-"""Tool for creating lyric books from OpenLyrics XML files."""
+"""Tool for creating lyric books from OpenLyrics XML files.
+
+DEPRECATED: This script is deprecated and maintained only for backward compatibility.
+New projects should use the openlyric_bookmaker package instead:
+
+    pip install openlyric_bookmaker
+    openlyric_bookmaker --config book_config.toml
+
+The new package provides:
+- Modern Python architecture with type hints
+- Better error handling and debugging
+- Jinja2 templates for all output formats
+- Multiple PDF formats (bound, display, ereader)
+- Improved HTML navigation
+- Active development and maintenance
+
+See https://github.com/yourusername/openlyric_bookmaker for details.
+"""
 
 import argparse
+import warnings
+
+# Issue deprecation warning
+warnings.warn(
+    "ol_bookmaker.py is deprecated. Use 'openlyric_bookmaker' command instead. "
+    "See README.md for migration instructions.",
+    DeprecationWarning,
+    stacklevel=2
+)
 import logging
 import re
 import shutil
