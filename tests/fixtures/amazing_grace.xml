@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<song xmlns="http://openlyrics.info/namespace/2009/song" 
+      version="0.9" 
+      createdIn="OpenLyrics Test" 
+      modifiedIn="OpenLyrics Test" 
+      modifiedDate="2026-01-31T00:00:00">
+  <properties>
+    <titles>
+      <title>Amazing Grace</title>
+      <title lang="en">How Sweet the Sound</title>
+    </titles>
+    <authors>
+      <author>John Newton</author>
+    </authors>
+    <copyright>Public Domain</copyright>
+    <ccliNo>22025</ccliNo>
+    <keywords>
+      <keyword>grace</keyword>
+      <keyword>redemption</keyword>
+      <keyword>hymn</keyword>
+    </keywords>
+    <themes>
+      <theme>Grace</theme>
+      <theme>Redemption</theme>
+    </themes>
+    <songbooks>
+      <songbook name="Test Hymnal" entry="123"/>
+    </songbooks>
+  </properties>
+  <lyrics>
+    <verse name="v1">
+      <lines><chord root="G"/>Amazing <chord root="C"/>grace, how <chord root="G"/>sweet the sound<br/>
+That <chord root="D"/>saved a <chord root="G"/>wretch like me<br/>
+</lines>
+    </verse>
+    <verse name="v2">
+      <lines><chord root="G"/>'Twas grace that <chord root="C"/>taught my <chord root="G"/>heart to fear<br/>
+And <chord root="D"/>grace my <chord root="G"/>fears relieved<br/>
+</lines>
+    </verse>
+    <verse name="c" type="chorus">
+      <lines>I once was lost, but now am found<br/>
+Was blind, but now I see<br/>
+</lines>
+    </verse>
+  </lyrics>
+</song>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<song xmlns="http://openlyrics.info/namespace/2009/song">
+  <properties>
+    <titles>
+      <title>Song with Recordings</title>
+    </titles>
+    <recordings>
+      <recording>
+        <title>Live Performance</title>
+        <artist>Test Band</artist>
+        <url>https://www.youtube.com/watch?v=test</url>
+      </recording>
+      <recording>
+        <title>Studio Version</title>
+        <artist>Test Artist</artist>
+        <url>https://example.com/test.mp3</url>
+      </recording>
+    </recordings>
+  </properties>
+  <lyrics>
+    <verse name="v1">
+      <lines><line>Test</line></lines>
+    </verse>
+  </lyrics>
+</song>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<song xmlns="http://openlyrics.info/namespace/2009/song">
+  <properties>
+    <titles>
+      <title>Test Song</title>
+    </titles>
+  </properties>
+  <lyrics>
+    <verse name="v1">
+      <lines>
+        <line>Test lyrics</line>
+      </lines>
+    </verse>
+  </lyrics>
+</song>
