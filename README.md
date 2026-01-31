@@ -31,3 +31,6 @@ The configuration file is a TOML file.  The default configuration file is `confi
 
 An example configuration file is available in [examples/example_config.toml](examples/example_config.toml).
 
+## TODO
+* Better html navigation for large songbooks
+* Get epub output working
