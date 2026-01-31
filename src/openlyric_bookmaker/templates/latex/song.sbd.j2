@@ -1,0 +1,67 @@
+% Song: {{ song.title }}
+\beginsong{ {{- song.title -}} }[
+{%- if song.authors %}
+by={ {{- song.properties.author_string -}} },
+{%- endif %}
+{%- if song.properties.titles|length > 1 %}
+{%- for title in song.properties.titles[1:] %}
+ititle={ {{- title -}} },
+{%- endfor %}
+{%- endif %}
+{%- if song.properties.keywords %}
+index={ {{- song.properties.keywords | join(', ') -}} },
+{%- endif %}
+{%- if song.properties.copyright %}
+cr={ {{- song.properties.copyright -}} },
+{%- endif %}
+{%- if song.properties.tune %}
+tune={ {{- song.properties.tune -}} },
+{%- endif %}
+]
+
+{% for comment in song.comments -%}
+\textnote{ {{- comment -}} }
+
+{% endfor -%}
+
+{% for verse in song.ordered_verses -%}
+{% if verse.is_chorus -%}
+\beginchorus
+{% else -%}
+\beginverse
+{% endif -%}
+{% for line in verse.lines -%}
+{% if line.chords -%}
+{# Build line with chords interspersed using namespace for mutable state #}
+{%- set ns = namespace(text="", last_pos=0) -%}
+{%- for chord in line.chords -%}
+  {# Add text before this chord #}
+  {%- if chord.position > ns.last_pos -%}
+    {%- set ns.text = ns.text ~ line.text[ns.last_pos:chord.position] -%}
+  {%- endif -%}
+  {# Add the chord #}
+  {%- set chord_str = chord.chord_root.replace("&", "b") -%}
+  {%- if chord.chord_structure -%}
+    {%- set chord_str = chord_str ~ chord.chord_structure -%}
+  {%- endif -%}
+  {%- set ns.text = ns.text ~ "\\[" ~ chord_str ~ "]" -%}
+  {%- set ns.last_pos = chord.position -%}
+{%- endfor -%}
+{# Add remaining text after last chord #}
+{%- if ns.last_pos < line.text|length -%}
+  {%- set ns.text = ns.text ~ line.text[ns.last_pos:] -%}
+{%- endif -%}
+{{ ns.text }}{% if line.comment %} \textnote{ {{- line.comment -}} }{% endif %}
+
+{% else -%}
+{{ line.text }}{% if line.comment %} \textnote{ {{- line.comment -}} }{% endif %}
+
+{% endif -%}
+{% endfor -%}
+{% if verse.is_chorus -%}
+\endchorus
+{% else -%}
+\endverse
+{% endif %}
+{% endfor -%}
+\endsong

@@ -1,6 +1,6 @@
-\documentclass[{{papersize}}]{book}
+\documentclass[12pt,a5paper]{book}
 \usepackage[bookmarks]{hyperref}
-\usepackage[chorded]{songs}
+\usepackage[lyric]{songs}
 \usepackage{graphicx}
 \graphicspath{ {./images/} }
 {% if margin.inner is defined %}
@@ -9,13 +9,13 @@
 \usepackage[top={{margin.top}}, bottom={{margin.bottom}}, left={{margin.left}}, right={{margin.right}}]{geometry}
 {% endif %}
 
-% Hide the vertical chord separator line
-\setlength{\cbarwidth}{0pt}
-\setlength{\sbarheight}{0pt}
+\sloppy
+\pagestyle{empty}
+\usepackage[scaled]{helvet}
+\renewcommand{\familydefault}{\sfdefault}
 
 % Set verse number width
 \settowidth{\versenumwidth}{1.\ }
-\pagestyle{empty}
 
 {% for section in sections %}
 \newindex{ {{-section.replace(" ","_")-}}_idx}{ {{-section.replace(" ","_")-}} }

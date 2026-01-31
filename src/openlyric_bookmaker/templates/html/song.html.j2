@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ song.title }}</title>
+    <style>
+        /* Override any OpenLyrics CSS that might cause issues */
+        song::before { display: none !important; }
+        song { all: unset; }
+    </style>
+    <style>
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                font-size: 14px;
+            }
+            .song-title {
+                font-size: 1.5em !important;
+            }
+            .chords {
+                font-size: 0.8em !important;
+            }
+        }
+        .song {
+            margin-bottom: 2em;
+        }
+        .song-header {
+            border-bottom: 2px solid #333;
+            margin-bottom: 1.5em;
+            padding-bottom: 0.5em;
+        }
+        .song-title {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 0;
+        }
+        .song-metadata {
+            color: #666;
+            font-style: italic;
+            margin-top: 0.5em;
+        }
+        .song-comment {
+            background: #f5f5f5;
+            border-left: 3px solid #999;
+            padding: 0.5em 1em;
+            margin: 1em 0;
+            font-style: italic;
+        }
+        .verse {
+            margin-bottom: 1.5em;
+        }
+        .verse-label {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 0.5em;
+        }
+        .chorus {
+            margin-left: 2em;
+            font-style: italic;
+        }
+        .verse-line {
+            position: relative;
+            margin-bottom: 0.2em;
+            padding-top: 1.2em;  /* Space for chords above */
+            line-height: 1.4;
+        }
+        .chords {
+            position: absolute;
+            top: 0;  /* Position at top of padding */
+            left: 0;
+            color: #0066cc;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            white-space: pre;
+            pointer-events: none;
+            line-height: 1;
+        }
+        .line-text {
+            white-space: pre-wrap;
+            line-height: 1.4;
+        }
+        /* Only use monospace for lines with chords */
+        .verse-line.has-chords .line-text {
+            font-family: 'Courier New', monospace;
+        }
+        .line-comment {
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+            margin-left: 1em;
+        }
+        .recordings {
+            margin-top: 2em;
+            padding-top: 1em;
+            border-top: 1px solid #ccc;
+        }
+        .recordings h3 {
+            margin-top: 0;
+        }
+        .recording {
+            margin-bottom: 1em;
+        }
+        .recording-title {
+            font-weight: bold;
+        }
+        .recording-artist {
+            font-style: italic;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="song">
+        <div class="song-header">
+            <h1 class="song-title">{{ song.title }}</h1>
+            <div class="song-metadata">
+                {% if song.authors %}
+                <div class="authors">By: {{ song.properties.author_string }}</div>
+                {% endif %}
+                {% if song.properties.tune %}
+                <div class="tune">Tune: {{ song.properties.tune }}</div>
+                {% endif %}
+                {% if song.properties.copyright %}
+                <div class="copyright">© {{ song.properties.copyright }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% for comment in song.comments %}
+        <div class="song-comment">{{ comment }}</div>
+        {% endfor %}
+
+        <div class="lyrics">
+            {% for verse in song.ordered_verses %}
+            <div class="verse {% if verse.is_chorus %}chorus{% endif %}">
+                <div class="verse-label">{{ verse.display_name }}</div>
+                {% for line in verse.lines %}
+                <div class="verse-line {% if line.chords %}has-chords{% endif %}">
+                    {% if line.chords %}
+                    <div class="chords">{% for chord in line.chords %}<span style="position: absolute; left: {{ chord.position }}ch;">{{ chord.full_chord }}</span>{% endfor %}</div>
+                    {% endif %}
+                    <div class="line-text">{{ line.text }}</div>
+                    {% if line.comment %}
+                    <span class="line-comment">({{ line.comment }})</span>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if song.recordings %}
+        <div class="recordings">
+            <h3>Recordings</h3>
+            {% for recording in song.recordings %}
+            <div class="recording">
+                {% if recording.title %}
+                <div class="recording-title">{{ recording.title }}</div>
+                {% endif %}
+                {% if recording.artist %}
+                <div class="recording-artist">{{ recording.artist }}</div>
+                {% endif %}
+                <div class="recording-link">
+                    <a href="{{ recording.url }}" target="_blank">{{ recording.url }}</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

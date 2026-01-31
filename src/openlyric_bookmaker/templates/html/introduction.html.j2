@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction</title>
+    <style>
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            border-bottom: 2px solid #333;
+            padding-bottom: 0.5em;
+        }
+        .metadata {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 2em;
+        }
+        .blurb {
+            white-space: pre-wrap;
+            margin-bottom: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ config.title }}</h1>
+    
+    <div class="metadata">
+        {% if config.author %}
+        <div>Compiled by: {{ config.author }}</div>
+        {% endif %}
+        {% if config.publish_date %}
+        <div>Published: {{ config.publish_date }}</div>
+        {% endif %}
+        {% if config.license %}
+        <div>License: {{ config.license }}</div>
+        {% endif %}
+    </div>
+
+    {% if config.title_blurb %}
+    <div class="blurb">{{ config.title_blurb }}</div>
+    {% endif %}
+
+    {% if intro %}
+    <div class="introduction">
+        {{ intro }}
+    </div>
+    {% endif %}
+</body>
+</html>

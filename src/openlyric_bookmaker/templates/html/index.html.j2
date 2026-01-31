@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="stylesheets/w3.css">
+    <style>
+        .w3-sidebar {
+            width: 250px;
+            background-color: #f1f1f1;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        .w3-main {
+            margin-left: 250px;
+        }
+        .section-title {
+            font-weight: bold;
+            padding: 8px 16px;
+            background-color: #ddd;
+            margin-top: 8px;
+            cursor: pointer;
+            user-select: none;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .section-title:hover {
+            background-color: #ccc;
+        }
+        .section-title::before {
+            content: '▼ ';
+            display: inline-block;
+            margin-right: 4px;
+            transition: transform 0.2s;
+        }
+        .section-title.collapsed::before {
+            transform: rotate(-90deg);
+        }
+        .section-songs {
+            max-height: 10000px;  /* Large enough for even the biggest sections */
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .section-songs.collapsed {
+            max-height: 0;
+        }
+        .song-link {
+            padding-left: 32px;
+        }
+        @media (max-width: 992px) {
+            .w3-sidebar {
+                width: 100%;
+                position: relative;
+            }
+            .w3-main {
+                margin-left: 0;
+            }
+        }
+        @media (max-width: 768px) {
+            .section-title {
+                padding: 6px 12px;
+                font-size: 0.9em;
+            }
+            .song-link {
+                padding: 6px 6px 6px 24px;
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="w3-sidebar w3-bar-block w3-collapse w3-card w3-animate-left" id="mySidebar">
+        <button class="w3-bar-item w3-button w3-large w3-hide-large" onclick="w3_close()">Close &times;</button>
+        
+        <a href="introduction.html" class="w3-bar-item w3-button" target="iframe_a">Introduction</a>
+        
+        {% for section_name, songs in sections.items() %}
+        <div class="section-title" onclick="toggleSection(this)">{{ section_name }}</div>
+        <div class="section-songs">
+        {% for song_info in songs %}
+        <a href="{{ song_info.output_file }}" class="w3-bar-item w3-button song-link" target="iframe_a">
+            {{ song_info.title }}
+        </a>
+        {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="w3-main">
+        <div class="w3-teal">
+            <button class="w3-button w3-teal w3-xlarge w3-hide-large" onclick="w3_open()">&#9776;</button>
+            <div class="w3-container">
+                <h1>{{ title }}</h1>
+            </div>
+        </div>
+
+        <div>
+            <iframe src="introduction.html" name="iframe_a" style="border:none; width:100%; height:100vh;"
+                title="Song Content"></iframe>
+        </div>
+    </div>
+
+    <script>
+        function w3_open() {
+            document.getElementById("mySidebar").style.display = "block";
+        }
+
+        function w3_close() {
+            document.getElementById("mySidebar").style.display = "none";
+        }
+
+        function toggleSection(element) {
+            element.classList.toggle('collapsed');
+            const songsDiv = element.nextElementSibling;
+            songsDiv.classList.toggle('collapsed');
+        }
+    </script>
+</body>
+</html>
