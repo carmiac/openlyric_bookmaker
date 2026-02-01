@@ -188,6 +188,122 @@
         .recording-link a:hover {
             text-decoration: underline;
         }
+        
+        /* Print styles */
+        @media print {
+            /* Force light theme colors for printing */
+            :root {
+                --bg-primary: #ffffff;
+                --bg-secondary: #f5f5f5;
+                --text-primary: #000000;
+                --text-secondary: #666666;
+                --border-color: #333333;
+                --chord-color: #0066cc;
+                --comment-bg: #f5f5f5;
+                --comment-border: #999999;
+            }
+            
+            body {
+                background: white;
+                color: black;
+                font-size: 10pt;
+                margin: 0.5in;
+                line-height: 1.4;
+            }
+            
+            /* Two-column layout for lyrics */
+            .lyrics {
+                column-count: 2;
+                column-gap: 0.5in;
+                column-rule: 1px solid #ccc;
+            }
+            
+            /* Song header stays full width */
+            .song-header {
+                column-span: all;
+                margin-bottom: 0.75em;
+                page-break-after: avoid;
+                break-after: avoid;
+            }
+            
+            /* Comments stay full width */
+            .song-comment {
+                column-span: all;
+                background: transparent;
+                border-left: 2px solid #666;
+                page-break-after: avoid;
+                break-after: avoid;
+                margin-bottom: 0.5em;
+            }
+            
+            /* Recordings stay full width at end */
+            .recordings {
+                column-span: all;
+                margin-top: 1em;
+                padding-top: 0.5em;
+                border-top: 1px solid #ccc;
+            }
+            
+            /* Hide media players in print, keep links */
+            .youtube-embed,
+            .midi-player embed,
+            .audio-player,
+            video {
+                display: none !important;
+            }
+            
+            /* Keep recording titles and links */
+            .recording-title,
+            .recording-artist,
+            .recording-link {
+                display: block;
+                font-size: 0.85em;
+            }
+            
+            /* Avoid page breaks inside verses */
+            .verse {
+                page-break-inside: avoid;
+                break-inside: avoid;
+                margin-bottom: 0.75em;
+            }
+            
+            /* Optimize chord display for black and white */
+            .chords {
+                color: #000000;
+                font-weight: bold;
+                font-size: 0.85em;
+            }
+            
+            /* Compact verse labels */
+            .verse-label {
+                font-weight: bold;
+                margin-bottom: 0.25em;
+                font-size: 0.9em;
+            }
+            
+            /* Tighter line spacing */
+            .verse-line {
+                padding-top: 1em;
+                margin-bottom: 0.1em;
+            }
+            
+            /* Print URLs for recordings */
+            .recording-link a::after {
+                content: " (" attr(href) ")";
+                font-size: 0.8em;
+                color: #666;
+            }
+            
+            /* Smaller title for more space */
+            .song-title {
+                font-size: 1.5em;
+                margin-bottom: 0.25em;
+            }
+            
+            .song-metadata {
+                font-size: 0.9em;
+            }
+        }
     </style>
 </head>
 <body>

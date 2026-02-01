@@ -147,6 +147,66 @@
                 font-size: 0.85em;
             }
         }
+        
+        /* Print styles */
+        @media print {
+            /* Hide ALL navigation elements */
+            .w3-sidebar,
+            .controls-bar,
+            #mySidebar,
+            .w3-bar-item.w3-button,
+            button {
+                display: none !important;
+            }
+            
+            /* Hide the title bar in index */
+            .w3-main > h1:first-child {
+                display: none !important;
+            }
+            
+            /* Make iframe content full width and full page */
+            .w3-main {
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
+            
+            /* Remove iframe borders */
+            iframe {
+                border: none !important;
+                box-shadow: none !important;
+                display: block !important;
+                width: 100% !important;
+                height: auto !important;
+                min-height: 100vh !important;
+            }
+            
+            /* Ensure proper page margins */
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            
+            /* Force light theme for printing */
+            :root {
+                --bg-primary: #ffffff;
+                --bg-secondary: #f5f5f5;
+                --text-primary: #000000;
+                --text-secondary: #666666;
+                --border-color: #333333;
+                --chord-color: #0066cc;
+            }
+            
+            /* Add guidance message */
+            body::before {
+                content: "Note: For best results, open a song in a new tab and print from there.";
+                display: block;
+                padding: 10px;
+                background: #f0f0f0;
+                border: 1px solid #999;
+                margin-bottom: 10px;
+                font-size: 10pt;
+            }
+        }
     </style>
 </head>
 <body>

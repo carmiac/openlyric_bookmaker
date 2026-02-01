@@ -50,6 +50,34 @@
             white-space: pre-wrap;
             margin-bottom: 1.5em;
         }
+        
+        /* Print styles */
+        @media print {
+            /* Force light theme for printing */
+            :root {
+                --bg-primary: #ffffff;
+                --text-primary: #000000;
+                --text-secondary: #666666;
+                --border-color: #333333;
+            }
+            
+            body {
+                background: white;
+                color: black;
+                font-size: 12pt;
+                margin: 0.5in;
+            }
+            
+            h1 {
+                page-break-after: avoid;
+                break-after: avoid;
+            }
+            
+            .metadata {
+                page-break-after: avoid;
+                break-after: avoid;
+            }
+        }
     </style>
 </head>
 <body>
