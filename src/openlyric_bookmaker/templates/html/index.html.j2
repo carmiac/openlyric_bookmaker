@@ -5,19 +5,93 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="stylesheets/w3.css">
     <style>
+        /* CSS Variables for theming */
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f1f1f1;
+            --bg-tertiary: #ddd;
+            --bg-hover: #ccc;
+            --text-primary: #000000;
+            --text-secondary: #666666;
+            --border-color: #333333;
+            --accent-color: #009688;
+            --sidebar-bg: #f1f1f1;
+            --header-bg: #009688;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #1e1e1e;
+            --bg-secondary: #2d2d2d;
+            --bg-tertiary: #3d3d3d;
+            --bg-hover: #4d4d4d;
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --border-color: #555555;
+            --accent-color: #00bfa5;
+            --sidebar-bg: #2d2d2d;
+            --header-bg: #00796b;
+        }
+        
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
         .w3-sidebar {
             width: 250px;
-            background-color: #f1f1f1;
+            background-color: var(--sidebar-bg);
             overflow-y: auto;
             overflow-x: hidden;
         }
         .w3-main {
             margin-left: 250px;
         }
+        
+        /* Controls bar */
+        .controls-bar {
+            padding: 8px 16px;
+            background-color: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .control-group {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+        .control-label {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            margin-right: 5px;
+        }
+        .control-btn {
+            padding: 4px 12px;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            color: var(--text-primary);
+            transition: background-color 0.2s;
+        }
+        .control-btn:hover {
+            background-color: var(--bg-hover);
+        }
+        .control-btn.active {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+        
         .section-title {
             font-weight: bold;
             padding: 8px 16px;
-            background-color: #ddd;
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
             margin-top: 8px;
             cursor: pointer;
             user-select: none;
@@ -26,13 +100,19 @@
             z-index: 10;
         }
         .section-title:hover {
-            background-color: #ccc;
+            background-color: var(--bg-hover);
         }
         .section-title::before {
-            content: '▼ ';
+            content: '';
             display: inline-block;
-            margin-right: 4px;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 7px solid currentColor;
+            margin-right: 8px;
             transition: transform 0.2s;
+            vertical-align: middle;
         }
         .section-title.collapsed::before {
             transform: rotate(-90deg);
@@ -73,6 +153,22 @@
     <div class="w3-sidebar w3-bar-block w3-collapse w3-card w3-animate-left" id="mySidebar">
         <button class="w3-bar-item w3-button w3-large w3-hide-large" onclick="w3_close()">Close &times;</button>
         
+        <!-- Controls Bar -->
+        <div class="controls-bar">
+            <div class="control-group">
+                <span class="control-label">Theme:</span>
+                <button class="control-btn" id="themeToggle" onclick="toggleTheme()">
+                    <span id="themeIcon">Dark</span>
+                </button>
+            </div>
+            <div class="control-group">
+                <span class="control-label">Font:</span>
+                <button class="control-btn" id="fontSmall" data-size="small" onclick="setFontSize('small')">A-</button>
+                <button class="control-btn active" id="fontMedium" data-size="medium" onclick="setFontSize('medium')">A</button>
+                <button class="control-btn" id="fontLarge" data-size="large" onclick="setFontSize('large')">A+</button>
+            </div>
+        </div>
+        
         <a href="introduction.html" class="w3-bar-item w3-button" target="iframe_a">Introduction</a>
         
         {% for section_name, songs in sections.items() %}
@@ -102,6 +198,87 @@
     </div>
 
     <script>
+        // Initialize preferences from localStorage
+        function initPreferences() {
+            const theme = localStorage.getItem('theme') || 'light';
+            const fontSize = localStorage.getItem('fontSize') || 'medium';
+            
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                document.getElementById('themeIcon').textContent = 'Light';
+            }
+            
+            setFontSize(fontSize, false);
+        }
+        
+        // Toggle dark/light theme
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            document.getElementById('themeIcon').textContent = newTheme === 'dark' ? 'Light' : 'Dark';
+            localStorage.setItem('theme', newTheme);
+            
+            // Apply theme to iframe content
+            try {
+                const iframe = document.querySelector('iframe[name="iframe_a"]');
+                if (iframe && iframe.contentDocument) {
+                    iframe.contentDocument.documentElement.setAttribute('data-theme', newTheme);
+                }
+            } catch(e) {
+                // Cross-origin iframe, can't access
+            }
+        }
+        
+        // Set font size
+        function setFontSize(size, save = true) {
+            // Remove active class from all font buttons
+            document.querySelectorAll('[data-size]').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Add active class to selected button
+            const activeBtn = document.querySelector(`[data-size="${size}"]`);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+            }
+            
+            if (save) {
+                localStorage.setItem('fontSize', size);
+            }
+            
+            // Apply font size to iframe content
+            try {
+                const iframe = document.querySelector('iframe[name="iframe_a"]');
+                if (iframe && iframe.contentDocument) {
+                    iframe.contentDocument.body.setAttribute('data-font-size', size);
+                }
+            } catch(e) {
+                // Cross-origin iframe, can't access
+            }
+        }
+        
+        // Apply theme to iframe when it loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initPreferences();
+            
+            const iframe = document.querySelector('iframe[name="iframe_a"]');
+            if (iframe) {
+                iframe.addEventListener('load', function() {
+                    try {
+                        const theme = document.documentElement.getAttribute('data-theme') || 'light';
+                        const fontSize = localStorage.getItem('fontSize') || 'medium';
+                        
+                        iframe.contentDocument.documentElement.setAttribute('data-theme', theme);
+                        iframe.contentDocument.body.setAttribute('data-font-size', fontSize);
+                    } catch(e) {
+                        // Cross-origin iframe, can't access
+                    }
+                });
+            }
+        });
+        
         function w3_open() {
             document.getElementById("mySidebar").style.display = "block";
         }

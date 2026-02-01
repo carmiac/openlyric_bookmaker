@@ -5,35 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ song.title }}</title>
     <style>
+        /* CSS Variables for theming */
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f5;
+            --text-primary: #000000;
+            --text-secondary: #666666;
+            --border-color: #333333;
+            --chord-color: #0066cc;
+            --comment-bg: #f5f5f5;
+            --comment-border: #999999;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #1e1e1e;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --border-color: #555555;
+            --chord-color: #6ba3ff;
+            --comment-bg: #2d2d2d;
+            --comment-border: #555555;
+        }
+        
         /* Override any OpenLyrics CSS that might cause issues */
         song::before { display: none !important; }
         song { all: unset; }
-    </style>
-    <style>
+        
         body {
             font-family: Georgia, 'Times New Roman', serif;
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
             line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
         }
+        
+        /* Font size variants */
+        body[data-font-size="small"] {
+            font-size: 14px;
+        }
+        body[data-font-size="medium"] {
+            font-size: 16px;
+        }
+        body[data-font-size="large"] {
+            font-size: 18px;
+        }
+        
         @media (max-width: 768px) {
             body {
                 padding: 10px;
-                font-size: 14px;
             }
-            .song-title {
-                font-size: 1.5em !important;
-            }
-            .chords {
-                font-size: 0.8em !important;
-            }
+            body[data-font-size="small"] { font-size: 12px; }
+            body[data-font-size="medium"] { font-size: 14px; }
+            body[data-font-size="large"] { font-size: 16px; }
         }
         .song {
             margin-bottom: 2em;
         }
         .song-header {
-            border-bottom: 2px solid #333;
+            border-bottom: 2px solid var(--border-color);
             margin-bottom: 1.5em;
             padding-bottom: 0.5em;
         }
@@ -41,25 +74,27 @@
             font-size: 2em;
             font-weight: bold;
             margin: 0;
+            color: var(--text-primary);
         }
         .song-metadata {
-            color: #666;
+            color: var(--text-secondary);
             font-style: italic;
             margin-top: 0.5em;
         }
         .song-comment {
-            background: #f5f5f5;
-            border-left: 3px solid #999;
+            background: var(--comment-bg);
+            border-left: 3px solid var(--comment-border);
             padding: 0.5em 1em;
             margin: 1em 0;
             font-style: italic;
+            color: var(--text-primary);
         }
         .verse {
             margin-bottom: 1.5em;
         }
         .verse-label {
             font-weight: bold;
-            color: #555;
+            color: var(--text-secondary);
             margin-bottom: 0.5em;
         }
         .chorus {
@@ -76,7 +111,7 @@
             position: absolute;
             top: 0;  /* Position at top of padding */
             left: 0;
-            color: #0066cc;
+            color: var(--chord-color);
             font-weight: bold;
             font-family: 'Courier New', monospace;
             font-size: 0.9em;

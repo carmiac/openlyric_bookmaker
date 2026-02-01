@@ -5,19 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Introduction</title>
     <style>
+        /* CSS Variables for theming */
+        :root {
+            --bg-primary: #ffffff;
+            --text-primary: #000000;
+            --text-secondary: #666666;
+            --border-color: #333333;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #1e1e1e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --border-color: #555555;
+        }
+        
         body {
             font-family: Georgia, 'Times New Roman', serif;
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
             line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
         }
+        
+        /* Font size variants */
+        body[data-font-size="small"] { font-size: 14px; }
+        body[data-font-size="medium"] { font-size: 16px; }
+        body[data-font-size="large"] { font-size: 18px; }
+        
         h1 {
-            border-bottom: 2px solid #333;
+            border-bottom: 2px solid var(--border-color);
             padding-bottom: 0.5em;
+            color: var(--text-primary);
         }
         .metadata {
-            color: #666;
+            color: var(--text-secondary);
             font-style: italic;
             margin-bottom: 2em;
         }
