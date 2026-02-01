@@ -188,6 +188,8 @@ class SongBookBuilder:
                     "title": song.title,
                     "file": song.source_file,
                     "output_file": f"songs/{song_filename}",
+                    "authors": song.properties.authors,
+                    "alternate_titles": song.properties.titles[1:] if len(song.properties.titles) > 1 else [],
                 })
 
             section_index[section_name] = song_list
