@@ -21,7 +21,7 @@ class TestHTMLRenderer:
         """Test rendering a song to HTML."""
         renderer = HTMLRenderer()
         output = renderer.render_song(sample_song)
-        
+
         assert isinstance(output, str)
         assert len(output) > 0
 
@@ -29,21 +29,21 @@ class TestHTMLRenderer:
         """Test that song title appears in HTML."""
         renderer = HTMLRenderer()
         output = renderer.render_song(sample_song)
-        
+
         assert "Amazing Grace" in output
 
     def test_html_contains_authors(self, sample_song):
         """Test that author information is included."""
         renderer = HTMLRenderer()
         output = renderer.render_song(sample_song)
-        
+
         assert "John Newton" in output
 
     def test_html_valid_structure(self, sample_song):
         """Test that HTML has basic valid structure."""
         renderer = HTMLRenderer()
         output = renderer.render_song(sample_song)
-        
+
         # Should have basic HTML tags
         assert "<div" in output or "<h" in output or "<p" in output
 
@@ -51,7 +51,7 @@ class TestHTMLRenderer:
         """Test that chords are rendered in HTML format."""
         renderer = HTMLRenderer()
         output = renderer.render_song(sample_song)
-        
+
         # Chords might be in spans or divs
         assert "G" in output
         assert "C" in output
@@ -60,7 +60,7 @@ class TestHTMLRenderer:
         """Test that verses are properly structured in HTML."""
         renderer = HTMLRenderer()
         output = renderer.render_song(sample_song)
-        
+
         # Should have some structure for verses
         assert "verse" in output.lower() or "lyrics" in output.lower()
 
@@ -68,15 +68,13 @@ class TestHTMLRenderer:
         """Test rendering the main index page."""
         renderer = HTMLRenderer()
         sections = {
-            "Traditional": [{"song": sample_song, "output_file": "amazing_grace.html", "title": "Amazing Grace"}]
+            "Traditional": [
+                {"song": sample_song, "output_file": "amazing_grace.html", "title": "Amazing Grace"}
+            ]
         }
-        
-        output = renderer.render_index(
-            title="Test Songbook",
-            sections=sections,
-            songbook_config={}
-        )
-        
+
+        output = renderer.render_index(title="Test Songbook", sections=sections, songbook_config={})
+
         assert isinstance(output, str)
         assert "Test Songbook" in output
         assert "Traditional" in output
@@ -89,29 +87,19 @@ class TestHTMLRenderer:
             "Section 1": [{"song": sample_song, "output_file": "song1.html", "title": "Song 1"}],
             "Section 2": [{"song": sample_song, "output_file": "song2.html", "title": "Song 2"}],
         }
-        
-        output = renderer.render_index(
-            title="Test Songbook",
-            sections=sections,
-            songbook_config={}
-        )
-        
+
+        output = renderer.render_index(title="Test Songbook", sections=sections, songbook_config={})
+
         assert "Section 1" in output
         assert "Section 2" in output
 
     def test_sticky_section_headers(self, sample_song):
         """Test that CSS for sticky headers is present."""
         renderer = HTMLRenderer()
-        sections = {
-            "Test": [{"song": sample_song, "output_file": "test.html", "title": "Test"}]
-        }
-        
-        output = renderer.render_index(
-            title="Test Songbook",
-            sections=sections,
-            songbook_config={}
-        )
-        
+        sections = {"Test": [{"song": sample_song, "output_file": "test.html", "title": "Test"}]}
+
+        output = renderer.render_index(title="Test Songbook", sections=sections, songbook_config={})
+
         # Should have CSS for sticky positioning
         assert "sticky" in output.lower() or "position" in output.lower()
 
@@ -119,7 +107,7 @@ class TestHTMLRenderer:
         """Test that recording links appear in HTML."""
         renderer = HTMLRenderer()
         output = renderer.render_song(sample_song_with_recordings)
-        
+
         # Should contain recording information
         assert "Live Performance" in output
         assert "Test Band" in output
@@ -129,7 +117,7 @@ class TestHTMLRenderer:
         """Test rendering multiple recordings."""
         renderer = HTMLRenderer()
         output = renderer.render_song(sample_song_with_recordings)
-        
+
         assert "Live Performance" in output
         assert "Studio Version" in output
 
@@ -139,13 +127,9 @@ class TestHTMLRenderer:
         sections = {
             "Test": [{"song": sample_song, "output_file": "test.html", "title": "Amazing Grace"}]
         }
-        
-        output = renderer.render_index(
-            title="Test Songbook",
-            sections=sections,
-            songbook_config={}
-        )
-        
+
+        output = renderer.render_index(title="Test Songbook", sections=sections, songbook_config={})
+
         # Both titles should be accessible
         assert "Amazing Grace" in output
 
@@ -154,9 +138,9 @@ class TestHTMLRenderer:
         verse = Verse(
             name="v1",
             verse_type=VerseType.VERSE,
-            lines=[Line("Test <script>alert('xss')</script>", [])]
+            lines=[Line("Test <script>alert('xss')</script>", [])],
         )
-        
+
         song = Song(
             properties=Properties(
                 titles=["Test & Test"],
@@ -165,15 +149,15 @@ class TestHTMLRenderer:
                 ccli_no="",
                 keywords=[],
                 themes=[],
-                tune=""
+                tune="",
             ),
             verses=[verse],
-            source_file=Path("test.xml")
+            source_file=Path("test.xml"),
         )
-        
+
         renderer = HTMLRenderer()
         output = renderer.render_song(song)
-        
+
         # Jinja2 should auto-escape by default
         # Script tag should be escaped
         assert "<script>" not in output or "&lt;script&gt;" in output
@@ -181,16 +165,18 @@ class TestHTMLRenderer:
     def test_responsive_design_hints(self, sample_song):
         """Test that HTML includes responsive design elements."""
         renderer = HTMLRenderer()
-        sections = {
-            "Test": [{"song": sample_song, "output_file": "test.html", "title": "Test"}]
-        }
-        
-        output = renderer.render_index(
-            title="Test Songbook",
-            sections=sections,
-            songbook_config={}
-        )
-        
+        sections = {"Test": [{"song": sample_song, "output_file": "test.html", "title": "Test"}]}
+
+        output = renderer.render_index(title="Test Songbook", sections=sections, songbook_config={})
+
         # Should have viewport meta or responsive CSS
-        assert "viewport" in output.lower() or "responsive" in output.lower() or "mobile" in output.lower()
-        assert "viewport" in output.lower() or "responsive" in output.lower() or "mobile" in output.lower()
+        assert (
+            "viewport" in output.lower()
+            or "responsive" in output.lower()
+            or "mobile" in output.lower()
+        )
+        assert (
+            "viewport" in output.lower()
+            or "responsive" in output.lower()
+            or "mobile" in output.lower()
+        )

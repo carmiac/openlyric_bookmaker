@@ -29,9 +29,9 @@ def sample_song() -> Song:
         ccli_no="22025",
         keywords=[],
         themes=[],
-        tune=""
+        tune="",
     )
-    
+
     verse1 = Verse(
         name="v1",
         verse_type=VerseType.VERSE,
@@ -41,33 +41,26 @@ def sample_song() -> Song:
                 chords=[
                     ChordPosition(position=0, chord_root="G"),
                     ChordPosition(position=16, chord_root="C"),
-                ]
+                ],
             ),
             Line(
                 text="That saved a wretch like me",
                 chords=[
                     ChordPosition(position=0, chord_root="G"),
-                ]
+                ],
             ),
-        ]
+        ],
     )
-    
+
     chorus = Verse(
         name="c",
         verse_type=VerseType.CHORUS,
         lines=[
-            Line(
-                text="I once was lost, but now am found",
-                chords=[]
-            ),
-        ]
+            Line(text="I once was lost, but now am found", chords=[]),
+        ],
     )
-    
-    return Song(
-        properties=properties,
-        verses=[verse1, chorus],
-        source_file=Path("test.xml")
-    )
+
+    return Song(properties=properties, verses=[verse1, chorus], source_file=Path("test.xml"))
 
 
 @pytest.fixture
@@ -80,17 +73,13 @@ def sample_song_with_recordings() -> Song:
         ccli_no="123456",
         keywords=["test"],
         themes=["testing"],
-        tune="Test Tune"
+        tune="Test Tune",
     )
-    
+
     verse = Verse(
-        name="v1",
-        verse_type=VerseType.VERSE,
-        lines=[
-            Line(text="Test lyrics", chords=[])
-        ]
+        name="v1", verse_type=VerseType.VERSE, lines=[Line(text="Test lyrics", chords=[])]
     )
-    
+
     return Song(
         properties=properties,
         verses=[verse],
@@ -98,15 +87,15 @@ def sample_song_with_recordings() -> Song:
             Recording(
                 url="https://www.youtube.com/watch?v=test123",
                 title="Live Performance",
-                artist="Test Band"
+                artist="Test Band",
             ),
             Recording(
                 url="https://example.com/audio/test.mp3",
                 title="Studio Version",
-                artist="Test Artist"
+                artist="Test Artist",
             ),
         ],
-        source_file=Path("test.xml")
+        source_file=Path("test.xml"),
     )
 
 
