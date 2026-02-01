@@ -26,6 +26,11 @@ class Recording:
         return self.url.lower().endswith((".mp3", ".ogg", ".wav", ".m4a", ".flac"))
 
     @property
+    def is_midi(self) -> bool:
+        """Check if this is a MIDI file."""
+        return self.url.lower().endswith((".mid", ".midi"))
+
+    @property
     def is_video(self) -> bool:
         """Check if this is a video file."""
         return self.url.lower().endswith((".mp4", ".webm", ".ogv"))

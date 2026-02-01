@@ -136,20 +136,57 @@
         .recordings {
             margin-top: 2em;
             padding-top: 1em;
-            border-top: 1px solid #ccc;
+            border-top: 1px solid var(--border-color);
         }
         .recordings h3 {
             margin-top: 0;
+            color: var(--text-primary);
         }
         .recording {
-            margin-bottom: 1em;
+            margin-bottom: 2em;
         }
         .recording-title {
             font-weight: bold;
+            color: var(--text-primary);
         }
         .recording-artist {
             font-style: italic;
-            color: #666;
+            color: var(--text-secondary);
+            margin-bottom: 0.5em;
+        }
+        .recording-player {
+            margin-top: 0.5em;
+        }
+        .youtube-embed {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #000;
+        }
+        .youtube-embed iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        .audio-player {
+            width: 100%;
+            max-width: 500px;
+        }
+        .recording-link {
+            margin-top: 0.5em;
+            font-size: 0.9em;
+        }
+        .recording-link a {
+            color: var(--chord-color);
+            text-decoration: none;
+        }
+        .recording-link a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -204,6 +241,50 @@
                 {% if recording.artist %}
                 <div class="recording-artist">{{ recording.artist }}</div>
                 {% endif %}
+                
+                <div class="recording-player">
+                    {% if recording.is_youtube %}
+                        {# Extract YouTube video ID and embed #}
+                        {% set video_id = recording.url.split('v=')[-1].split('&')[0] if 'v=' in recording.url else recording.url.split('/')[-1].split('?')[0] %}
+                        <div class="youtube-embed">
+                            <iframe src="https://www.youtube.com/embed/{{ video_id }}" 
+                                    allowfullscreen
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+                            </iframe>
+                        </div>
+                    {% elif recording.is_midi %}
+                        {# MIDI player using embedded object #}
+                        <div class="midi-player">
+                            <p style="font-size: 0.9em; margin-bottom: 0.5em;">🎹 MIDI File</p>
+                            <embed src="{{ recording.url }}" 
+                                   type="audio/midi" 
+                                   width="100%" 
+                                   height="60"
+                                   style="max-width: 500px;">
+                            <p style="font-size: 0.85em; margin-top: 0.5em; color: var(--text-secondary);">
+                                If the player doesn't work, <a href="{{ recording.url }}" download>download the MIDI file</a> to play it locally.
+                            </p>
+                        </div>
+                    {% elif recording.is_audio %}
+                        {# HTML5 audio player for audio files #}
+                        <audio class="audio-player" controls>
+                            <source src="{{ recording.url }}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    {% elif recording.is_video %}
+                        {# HTML5 video player for video files #}
+                        <video class="audio-player" controls>
+                            <source src="{{ recording.url }}" type="video/mp4">
+                            Your browser does not support the video element.
+                        </video>
+                    {% else %}
+                        {# Fallback: just show a link #}
+                        <div class="recording-link">
+                            <a href="{{ recording.url }}" target="_blank">🔗 Open recording</a>
+                        </div>
+                    {% endif %}
+                </div>
+                
                 <div class="recording-link">
                     <a href="{{ recording.url }}" target="_blank">{{ recording.url }}</a>
                 </div>
