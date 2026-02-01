@@ -3,7 +3,7 @@
 import logging
 from pathlib import Path
 
-from jinja2 import Environment, FileSystemLoader, Template
+from jinja2 import Environment, FileSystemLoader
 
 from openlyric_bookmaker.models.song import Song
 

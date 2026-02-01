@@ -185,7 +185,7 @@ class OpenLyricsParser:
                         )
                         for c in current_chords
                     ]
-                    
+
                     lines.append(
                         Line(
                             text=stripped_text.rstrip(),
@@ -238,7 +238,7 @@ class OpenLyricsParser:
                 )
                 for c in current_chords
             ]
-            
+
             lines.append(
                 Line(text=stripped_text.rstrip(), chords=adjusted_chords, comment=current_comment)
             )

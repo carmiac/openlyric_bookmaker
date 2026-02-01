@@ -67,7 +67,7 @@ def main() -> int:
 
     # Validate config file exists
     if not args.config.exists():
-        logger.error(f"Config file not found: {args.config}")
+        logger.error("Config file not found: %s", args.config)
         return 1
 
     try:
@@ -78,12 +78,12 @@ def main() -> int:
             clean=args.clean,
         )
         builder.build()
-        
+
         logger.info("✓ Songbook build completed successfully")
         return 0
 
     except Exception as e:
-        logger.error(f"Build failed: {e}", exc_info=args.verbose)
+        logger.error("Build failed: %s", e, exc_info=args.verbose)
         return 1
 
 

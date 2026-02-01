@@ -37,9 +37,9 @@ class SongBookBuilder:
         self.output_dir = Path(output_dir) if output_dir else self.base_path / "output"
         self.clean = clean
 
-        logger.info(f"Initialized SongBookBuilder with config: {config_path}")
-        logger.info(f"Base path: {self.base_path}")
-        logger.info(f"Output directory: {self.output_dir}")
+        logger.info("Initialized SongBookBuilder with config: %s", config_path)
+        logger.info("Base path: %s", self.base_path)
+        logger.info("Output directory: %s", self.output_dir)
 
     def build(self) -> None:
         """Build all configured output formats."""
@@ -51,7 +51,7 @@ class SongBookBuilder:
 
         # Build each output format
         for format_name, format_config in self.config["output_formats"].items():
-            logger.info(f"Building output format: {format_name}")
+            logger.info("Building output format: %s", format_name)
 
             format_type = format_config["type"]
             if format_type == "html":
@@ -59,7 +59,7 @@ class SongBookBuilder:
             elif format_type == "pdf":
                 self._build_pdf(format_name, format_config, sections)
             elif format_type == "epub":
-                logger.warning(f"EPUB output not yet implemented, skipping {format_name}")
+                logger.warning("EPUB output not yet implemented, skipping %s", format_name)
 
         logger.info("Build complete!")
 
@@ -83,7 +83,7 @@ class SongBookBuilder:
         parser = OpenLyricsParser()
 
         for section_name, section_config in self.config["sections"].items():
-            logger.info(f"Parsing section: {section_name}")
+            logger.info("Parsing section: %s", section_name)
 
             # Get list of files for this section
             file_patterns = section_config.get("files", [])
@@ -97,26 +97,24 @@ class SongBookBuilder:
             songs = []
             for file_path in files:
                 try:
-                    logger.debug(f"Parsing {file_path}")
+                    logger.debug("Parsing %s", file_path)
                     song = parser.parse_file(file_path)
-                    
+
                     # Validate song
                     errors = song.validate()
                     if errors:
-                        logger.warning(f"Validation errors in {file_path}: {errors}")
-                    
+                        logger.warning("Validation errors in %s: {errors}", file_path)
+
                     songs.append(song)
                 except Exception as e:
-                    logger.error(f"Error parsing {file_path}: {e}")
+                    logger.error("Error parsing %s: {e}", file_path)
 
             sections[section_name] = songs
-            logger.info(f"Parsed {len(songs)} songs in section {section_name}")
+            logger.info("Parsed %s songs in section {section_name}", len(songs))
 
         return sections
 
-    def _build_html(
-        self, format_name: str, format_config: dict, sections: dict[str, list]
-    ) -> None:
+    def _build_html(self, format_name: str, format_config: dict, sections: dict[str, list]) -> None:
         """Build HTML output.
 
         Args:
@@ -126,7 +124,7 @@ class SongBookBuilder:
         """
         output_dir = self.output_dir / format_config["output_dir"]
         output_dir.mkdir(parents=True, exist_ok=True)
-        logger.info(f"Creating HTML output in {output_dir}")
+        logger.info("Creating HTML output in %s", output_dir)
 
         # Initialize renderer
         template_dir = format_config.get("template_dir")
@@ -136,7 +134,9 @@ class SongBookBuilder:
             if template_path.exists():
                 renderer = HTMLRenderer(template_path)
             else:
-                logger.warning(f"Template directory not found: {template_path}, using built-in templates")
+                logger.warning(
+                    f"Template directory not found: {template_path}, using built-in templates"
+                )
                 renderer = HTMLRenderer()
         else:
             renderer = HTMLRenderer()
@@ -150,11 +150,11 @@ class SongBookBuilder:
                     if dest.exists():
                         shutil.rmtree(dest)
                     shutil.copytree(src, dest)
-                    logger.debug(f"Copied stylesheet directory: {src} -> {dest}")
+                    logger.debug("Copied stylesheet directory: %s -> {dest}", src)
                 elif src.is_file():
                     dest = output_dir / src.name
                     shutil.copy(src, dest)
-                    logger.debug(f"Copied stylesheet: {src} -> {dest}")
+                    logger.debug("Copied stylesheet: %s -> {dest}", src)
 
         # Copy images
         if "image_dir" in format_config:
@@ -164,7 +164,7 @@ class SongBookBuilder:
                 if dest.exists():
                     shutil.rmtree(dest)
                 shutil.copytree(src, dest)
-                logger.debug(f"Copied images: {src} -> {dest}")
+                logger.debug("Copied images: %s -> {dest}", src)
 
         # Create songs directory
         songs_dir = output_dir / "songs"
@@ -177,20 +177,24 @@ class SongBookBuilder:
             for song in songs:
                 # Render song to HTML
                 html = renderer.render_song(song)
-                
+
                 # Write to file
                 song_filename = f"{song.source_file.stem}.html"
                 song_path = songs_dir / song_filename
                 song_path.write_text(html, encoding="utf-8")
-                
+
                 # Add to section index
-                song_list.append({
-                    "title": song.title,
-                    "file": song.source_file,
-                    "output_file": f"songs/{song_filename}",
-                    "authors": song.properties.authors,
-                    "alternate_titles": song.properties.titles[1:] if len(song.properties.titles) > 1 else [],
-                })
+                song_list.append(
+                    {
+                        "title": song.title,
+                        "file": song.source_file,
+                        "output_file": f"songs/{song_filename}",
+                        "authors": song.properties.authors,
+                        "alternate_titles": (
+                            song.properties.titles[1:] if len(song.properties.titles) > 1 else []
+                        ),
+                    }
+                )
 
             section_index[section_name] = song_list
 
@@ -207,11 +211,9 @@ class SongBookBuilder:
         intro_html = renderer.render_introduction(intro_text, self.config["songbook"])
         (output_dir / "introduction.html").write_text(intro_html, encoding="utf-8")
 
-        logger.info(f"HTML build complete: {len(sum(sections.values(), []))} songs rendered")
+        logger.info("HTML build complete: %s songs rendered", len(sum(sections.values(), [])))
 
-    def _build_pdf(
-        self, format_name: str, format_config: dict, sections: dict[str, list]
-    ) -> None:
+    def _build_pdf(self, format_name: str, format_config: dict, sections: dict[str, list]) -> None:
         """Build PDF output.
 
         Args:
@@ -223,7 +225,7 @@ class SongBookBuilder:
         output_dir.mkdir(parents=True, exist_ok=True)
         build_dir = self.base_path / "build" / format_config["output_dir"]
         build_dir.mkdir(parents=True, exist_ok=True)
-        logger.info(f"Creating PDF output in {output_dir}")
+        logger.info("Creating PDF output in %s", output_dir)
 
         # Initialize renderer
         renderer = LaTeXRenderer()
@@ -251,7 +253,7 @@ class SongBookBuilder:
         )
         songfile_path = build_dir / "songfile.sbd"
         songfile_path.write_text(songfile_content, encoding="utf-8")
-        logger.debug(f"Wrote songfile: {songfile_path}")
+        logger.debug("Wrote songfile: %s", songfile_path)
 
         # Copy template files to build directory
         template_dir = format_config.get("template_dir")
@@ -261,6 +263,7 @@ class SongBookBuilder:
                 for template_file in template_path.glob("*.tex"):
                     # Render Jinja2 templates
                     from jinja2 import Environment, FileSystemLoader
+
                     env = Environment(
                         loader=FileSystemLoader(template_path),
                         trim_blocks=True,
@@ -268,24 +271,24 @@ class SongBookBuilder:
                         autoescape=False,
                     )
                     template = env.get_template(template_file.name)
-                    
+
                     # Prepare template variables
                     template_vars = (
                         format_config.get("render_variables", {})
                         | self.config["songbook"]
                         | {"sections": list(sections.keys())}
                     )
-                    
+
                     rendered = template.render(**template_vars)
                     (build_dir / template_file.name).write_text(rendered, encoding="utf-8")
-                    logger.debug(f"Rendered template: {template_file.name}")
+                    logger.debug("Rendered template: %s", template_file.name)
 
         # Copy style file
         if "songbook_style" in format_config:
             src = self.base_path / format_config["songbook_style"]
             if src.exists():
                 shutil.copy(src, build_dir)
-                logger.debug(f"Copied style file: {src}")
+                logger.debug("Copied style file: %s", src)
 
         # Copy images
         if "image_dir" in format_config:
@@ -295,19 +298,19 @@ class SongBookBuilder:
                 if dest.exists():
                     shutil.rmtree(dest)
                 shutil.copytree(src, dest)
-                logger.debug(f"Copied images: {src} -> {dest}")
+                logger.debug("Copied images: %s -> {dest}", src)
 
         # Compile PDF
         output_filename = format_config.get("output_file", "songbook")
         main_tex = format_config.get("songbook_template", "songbook.tex")
-        
+
         compiler = PDFCompiler(build_dir)
         try:
             pdf_path = compiler.compile(main_tex, output_filename, runs=2)
-            
+
             # Copy to output directory
             shutil.copy(pdf_path, output_dir)
-            logger.info(f"✓ PDF build complete: {output_dir / pdf_path.name}")
+            logger.info("✓ PDF build complete: %s", output_dir / pdf_path.name)
         except RuntimeError as e:
-            logger.error(f"PDF compilation failed: {e}")
+            logger.error("PDF compilation failed: %s", e)
             raise

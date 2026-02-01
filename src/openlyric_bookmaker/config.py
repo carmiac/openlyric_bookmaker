@@ -116,6 +116,6 @@ def get_file_list(file_patterns: list[str | Path], base_path: Path) -> list[Path
             xml_files = sorted(path.glob("*.xml"))
             files.extend(xml_files)
         else:
-            logger.warning(f"Path not found: {path}")
+            logger.warning("Path not found: %s", path)
 
     return files
