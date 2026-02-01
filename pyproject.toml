@@ -8,7 +8,8 @@ version = "0.2.0"
 description = "Tool for creating songbooks from OpenLyrics XML files"
 readme = "README.md"
 requires-python = ">=3.10"
-license = {text = "MIT"}
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [
     {name = "carmiac", email = "carmiac@users.noreply.github.com"}
 ]
@@ -16,7 +17,6 @@ keywords = ["openlyrics", "songbook", "lyrics", "latex", "pdf", "html", "epub"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: End Users/Desktop",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
