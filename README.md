@@ -24,14 +24,32 @@ Simple text-based format with inline chords. Perfect for quick song entry and ed
 
 ```
 {title: Amazing Grace}
+{x-alt-title: How Sweet the Sound}
 {artist: John Newton}
+{copyright: Public Domain}
+{ccli: 22025}
 {key: D}
+{x-tune: NEW BRITAIN}
+{x-theme: Traditional}
+{x-theme: Hymns}
+{x-recording-url: https://youtube.com/watch?v=xyz}
+{x-recording-title: Live Performance}
+{x-recording-artist: Mormon Tabernacle Choir}
 
 {start_of_verse}
 Amazing [D]grace how [G]sweet the [D]sound
 That saved a wretch like [A]me
 {end_of_verse}
 ```
+
+**Standard directives:** `{title}`, `{artist}`, `{composer}`, `{copyright}`, `{ccli}`, `{key}`
+
+**Custom extensions (x- prefix) for full metadata:**
+- `{x-alt-title}` - Alternate titles
+- `{x-tune}` - Traditional tune names
+- `{x-theme}` - Song themes (can have multiple)
+- `{x-keyword}` - Keywords/tags (can have multiple)
+- `{x-recording-url/title/artist}` - Rich recording metadata
 
 Supported file extensions: `.cho`, `.chordpro`, `.chopro`, `.crd`
 

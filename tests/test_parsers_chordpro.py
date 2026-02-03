@@ -237,3 +237,102 @@ Lyrics here
         # Only verse should be parsed, not tab
         assert len(song.verses) == 1
         assert song.verses[0].verse_type == VerseType.VERSE
+
+    def test_custom_alternate_title(self, tmp_path):
+        """Test x-alt-title custom directive."""
+        song_file = tmp_path / "test.cho"
+        song_file.write_text("""{title: Main Title}
+{x-alt-title: Alternate Title}
+
+{start_of_verse}
+Test
+{end_of_verse}
+""")
+
+        parser = ChordProParser(song_file)
+        song = parser.parse()
+
+        assert "Main Title" in song.properties.titles
+        assert "Alternate Title" in song.properties.titles
+
+    def test_custom_tune_directive(self, tmp_path):
+        """Test x-tune custom directive."""
+        song_file = tmp_path / "test.cho"
+        song_file.write_text("""{title: Test Song}
+{x-tune: NEW BRITAIN}
+
+{start_of_verse}
+Test
+{end_of_verse}
+""")
+
+        parser = ChordProParser(song_file)
+        song = parser.parse()
+
+        assert song.properties.tune == "NEW BRITAIN"
+
+    def test_custom_themes_and_keywords(self, tmp_path):
+        """Test x-theme and x-keyword custom directives."""
+        song_file = tmp_path / "test.cho"
+        song_file.write_text("""{title: Test Song}
+{x-theme: Traditional}
+{x-theme: Hymns}
+{x-keyword: Grace}
+{x-keyword: Faith}
+
+{start_of_verse}
+Test
+{end_of_verse}
+""")
+
+        parser = ChordProParser(song_file)
+        song = parser.parse()
+
+        assert "Traditional" in song.properties.themes
+        assert "Hymns" in song.properties.themes
+        assert "Grace" in song.properties.keywords
+        assert "Faith" in song.properties.keywords
+
+    def test_custom_recording_metadata(self, tmp_path):
+        """Test x-recording-* custom directives."""
+        song_file = tmp_path / "test.cho"
+        song_file.write_text("""{title: Test Song}
+{x-recording-url: https://youtube.com/watch?v=abc}
+{x-recording-title: Live Performance}
+{x-recording-artist: The Band}
+
+{start_of_verse}
+Test
+{end_of_verse}
+""")
+
+        parser = ChordProParser(song_file)
+        song = parser.parse()
+
+        assert len(song.recordings) == 1
+        assert song.recordings[0].url == "https://youtube.com/watch?v=abc"
+        assert song.recordings[0].title == "Live Performance"
+        assert song.recordings[0].artist == "The Band"
+
+    def test_multiple_recordings(self, tmp_path):
+        """Test multiple recording entries."""
+        song_file = tmp_path / "test.cho"
+        song_file.write_text("""{title: Test Song}
+{x-recording-url: https://youtube.com/1}
+{x-recording-title: Version 1}
+{x-recording-url: https://youtube.com/2}
+{x-recording-title: Version 2}
+
+{start_of_verse}
+Test
+{end_of_verse}
+""")
+
+        parser = ChordProParser(song_file)
+        song = parser.parse()
+
+        assert len(song.recordings) == 2
+        assert song.recordings[0].url == "https://youtube.com/1"
+        assert song.recordings[0].title == "Version 1"
+        assert song.recordings[1].url == "https://youtube.com/2"
+        assert song.recordings[1].title == "Version 2"

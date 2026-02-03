@@ -25,6 +25,15 @@ class ChordProParser:
     CCLI_DIRECTIVES = {"ccli"}
     KEY_DIRECTIVES = {"key", "k"}
 
+    # Custom extension directives (x-prefix)
+    ALT_TITLE_DIRECTIVES = {"x-alt-title", "x-subtitle"}
+    TUNE_DIRECTIVES = {"x-tune"}
+    THEME_DIRECTIVES = {"x-theme"}
+    KEYWORD_DIRECTIVES = {"x-keyword"}
+    RECORDING_URL_DIRECTIVES = {"x-recording-url"}
+    RECORDING_TITLE_DIRECTIVES = {"x-recording-title"}
+    RECORDING_ARTIST_DIRECTIVES = {"x-recording-artist"}
+
     # Section markers
     VERSE_START = {"start_of_verse", "sov"}
     VERSE_END = {"end_of_verse", "eov"}
@@ -47,6 +56,9 @@ class ChordProParser:
         self.chorus_counter = 1
         self.bridge_counter = 1
         self.in_tab = False
+        self.pending_recording_url: str | None = None
+        self.pending_recording_title: str | None = None
+        self.pending_recording_artist: str | None = None
 
     def parse(self) -> Song:
         """Parse the ChordPro file and return a Song object."""
@@ -81,6 +93,10 @@ class ChordProParser:
         # Close any open section
         if self.current_section:
             self._end_section()
+
+        # Save any pending recording
+        if self.pending_recording_url:
+            self._save_pending_recording()
 
         # Use filename as title if no title directive found
         if not self.properties.titles:
@@ -137,6 +153,39 @@ class ChordProParser:
                 if "Key: " + value not in self.properties.keywords:
                     self.properties.keywords.append("Key: " + value)
 
+            # Custom extension directives
+            # Alternate titles
+            elif directive in self.ALT_TITLE_DIRECTIVES:
+                if value not in self.properties.titles:
+                    self.properties.titles.append(value)
+
+            # Tune name
+            elif directive in self.TUNE_DIRECTIVES:
+                self.properties.tune = value
+
+            # Themes (can have multiple)
+            elif directive in self.THEME_DIRECTIVES:
+                if value not in self.properties.themes:
+                    self.properties.themes.append(value)
+
+            # Keywords (can have multiple)
+            elif directive in self.KEYWORD_DIRECTIVES:
+                if value not in self.properties.keywords:
+                    self.properties.keywords.append(value)
+
+            # Recording metadata (can specify multiple parts)
+            elif directive in self.RECORDING_URL_DIRECTIVES:
+                # If we have a pending recording, save it first
+                if self.pending_recording_url:
+                    self._save_pending_recording()
+                self.pending_recording_url = value
+
+            elif directive in self.RECORDING_TITLE_DIRECTIVES:
+                self.pending_recording_title = value
+
+            elif directive in self.RECORDING_ARTIST_DIRECTIVES:
+                self.pending_recording_artist = value
+
             # Section starts
             elif directive in self.VERSE_START:
                 self._start_section("verse", value)
@@ -166,9 +215,24 @@ class ChordProParser:
                     # Use comment as verse name
                     pass  # We'll handle this when creating the verse
 
-            # URL (recording)
+            # URL (legacy recording - just URL)
             elif directive == "url" and value:
                 self.recordings.append(Recording(url=value))
+
+    def _save_pending_recording(self) -> None:
+        """Save the pending recording data to the recordings list."""
+        if self.pending_recording_url:
+            recording = Recording(
+                url=self.pending_recording_url,
+                title=self.pending_recording_title,
+                artist=self.pending_recording_artist,
+            )
+            self.recordings.append(recording)
+
+            # Reset pending state
+            self.pending_recording_url = None
+            self.pending_recording_title = None
+            self.pending_recording_artist = None
 
     def _start_section(self, section_type: str, label: str = "") -> None:
         """Start a new song section."""
