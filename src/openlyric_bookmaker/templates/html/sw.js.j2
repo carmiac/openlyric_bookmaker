@@ -1,5 +1,6 @@
 // Service Worker for Progressive Web App
-// Strategy: Stale-While-Revalidate
+// Strategy: Stale-While-Revalidate with full pre-caching
+//   - Pre-caches all songs on install for full offline access
 //   - Serves cached content immediately (fast!)
 //   - Fetches fresh content in background
 //   - Updates cache for next visit
@@ -10,16 +11,21 @@ const STATIC_CACHE = 'songbook-static-v1';
 const STATIC_FILES = [
     './',
     './index.html',
+    './introduction.html',
+    './manifest.json',
     './stylesheets/w3.css',
+    {% for song_file in song_files -%}
+    './songs/{{ song_file }}',
+    {% endfor -%}
 ];
 
-// Install event - cache static files
+// Install event - cache all files
 self.addEventListener('install', (event) => {
     console.log('Service Worker: Installing...');
     event.waitUntil(
         caches.open(STATIC_CACHE)
             .then((cache) => {
-                console.log('Service Worker: Caching static files');
+                console.log('Service Worker: Caching {{ song_files|length }} songs and static files');
                 return cache.addAll(STATIC_FILES);
             })
             .then(() => self.skipWaiting())

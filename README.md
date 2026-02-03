@@ -133,6 +133,7 @@ sections_file = "sections.toml"
 enabled = true
 template = "html/index.html.j2"
 introduction = "intro.html"
+pwa_start_url = "./songbook.html"  # Optional: URL to open when PWA is launched from home screen
 
 [bound_pdf]
 enabled = true

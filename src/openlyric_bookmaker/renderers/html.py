@@ -59,7 +59,7 @@ class HTMLRenderer:
         return template.render(title=title, sections=sections, config=songbook_config)
 
     def render_manifest(
-        self, title: str, description: str = "", short_title: str | None = None
+        self, title: str, description: str = "", short_title: str | None = None, start_url: str | None = None
     ) -> str:
         """Render the PWA manifest file.
 
@@ -67,6 +67,7 @@ class HTMLRenderer:
             title: Full songbook title
             description: Description of the songbook
             short_title: Short title for app (defaults to title)
+            start_url: URL to launch when PWA is opened (defaults to ./index.html)
 
         Returns:
             JSON string for manifest.json
@@ -76,7 +77,20 @@ class HTMLRenderer:
             title=title,
             short_title=short_title or title[:12],  # Limit to 12 chars
             description=description or f"{title} songbook",
+            start_url=start_url,
         )
+
+    def render_service_worker(self, song_files: list[str]) -> str:
+        """Render the service worker with pre-cache list.
+
+        Args:
+            song_files: List of song HTML filenames to pre-cache
+
+        Returns:
+            JavaScript service worker code
+        """
+        template = self.env.get_template("sw.js.j2")
+        return template.render(song_files=song_files)
 
     def render_introduction(self, intro_text: str, songbook_config: dict) -> str:
         """Render the introduction page.
