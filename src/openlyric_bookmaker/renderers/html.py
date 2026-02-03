@@ -58,6 +58,26 @@ class HTMLRenderer:
         template = self.env.get_template("index.html.j2")
         return template.render(title=title, sections=sections, config=songbook_config)
 
+    def render_manifest(
+        self, title: str, description: str = "", short_title: str | None = None
+    ) -> str:
+        """Render the PWA manifest file.
+
+        Args:
+            title: Full songbook title
+            description: Description of the songbook
+            short_title: Short title for app (defaults to title)
+
+        Returns:
+            JSON string for manifest.json
+        """
+        template = self.env.get_template("manifest.json.j2")
+        return template.render(
+            title=title,
+            short_title=short_title or title[:12],  # Limit to 12 chars
+            description=description or f"{title} songbook",
+        )
+
     def render_introduction(self, intro_text: str, songbook_config: dict) -> str:
         """Render the introduction page.
 

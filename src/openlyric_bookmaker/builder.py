@@ -242,6 +242,20 @@ class SongBookBuilder:
         intro_html = renderer.render_introduction(intro_text, self.config["songbook"])
         (output_dir / "introduction.html").write_text(intro_html, encoding="utf-8")
 
+        # Render manifest.json for PWA
+        manifest_json = renderer.render_manifest(
+            title=self.config["songbook"]["title"],
+            description=self.config["songbook"].get("description", ""),
+            short_title=self.config["songbook"].get("short_title"),
+        )
+        (output_dir / "manifest.json").write_text(manifest_json, encoding="utf-8")
+
+        # Copy service worker for PWA
+        sw_src = Path(__file__).parent / "templates" / "html" / "sw.js"
+        sw_dest = output_dir / "sw.js"
+        shutil.copy(sw_src, sw_dest)
+        logger.info("Added PWA support (manifest.json and service worker)")
+
         logger.info("HTML build complete: %s songs rendered", len(sum(sections.values(), [])))
 
     def _build_pdf(self, format_name: str, format_config: dict, sections: dict[str, list]) -> None:

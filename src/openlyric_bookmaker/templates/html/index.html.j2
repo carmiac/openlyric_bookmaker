@@ -3,6 +3,9 @@
 <head>
     <title>{{ title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{ config.get('description', title + ' songbook') }}">
+    <meta name="theme-color" content="#009688">
+    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="stylesheets/w3.css">
     <style>
         /* CSS Variables for theming */
@@ -462,6 +465,21 @@
             // Update count
             const countText = visibleCount === 1 ? '1 song found' : `${visibleCount} songs found`;
             document.getElementById('searchCount').textContent = countText;
+        }
+    </script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registered:', registration.scope);
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed:', err);
+                    });
+            });
         }
     </script>
 </body>
