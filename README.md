@@ -1,18 +1,57 @@
 # Open Lyric Book Maker
 
-A modern Python tool for creating beautiful songbooks in multiple formats (PDF, HTML, EPUB) from songs in the [OpenLyrics](https://github.com/openlyrics/openlyrics/) XML format.
+A modern Python tool for creating beautiful songbooks in multiple formats (PDF, HTML, EPUB) from songs in **OpenLyrics XML** or **ChordPro** format.
 
 ## Features
 
 - 📚 **Multiple output formats**: PDF (bound/display/ereader), HTML with navigation, EPUB (coming soon)
+- 📝 **Multiple input formats**: OpenLyrics XML and ChordPro (.cho, .chordpro, .crd)
 - 🎵 **Rich song metadata**: Titles, authors, CCLI numbers, copyright, themes, alternate titles
 - 🎸 **Chord support**: Display guitar/ukulele chords with lyrics
 - 📑 **Automatic indices**: Table of contents, author index with configurable sorting
 - 🎨 **Customizable templates**: Jinja2-based templates for full control
-- 📱 **Responsive HTML**: Mobile-friendly navigation with sticky section headers
-- 🎬 **Recording metadata**: Built-in support for linking audio/video recordings (YouTube, etc.)
+- 📱 **Responsive HTML**: Mobile-friendly navigation with sticky section headers, dark mode
+- 🎬 **Media player**: Built-in support for linking audio/video recordings (YouTube, audio files)
+- 🖨️ **Print-optimized**: CSS print styles for clean two-column printed output
+- 🔍 **Search**: Real-time search by title, author in HTML output
 - 📖 **Section support**: Organize songs into themed sections
 - 🔍 **Type-safe**: Full type hints throughout codebase
+
+## Supported Song Formats
+
+### ChordPro (Easy to Write)
+Simple text-based format with inline chords. Perfect for quick song entry and editing:
+
+```
+{title: Amazing Grace}
+{artist: John Newton}
+{key: D}
+
+{start_of_verse}
+Amazing [D]grace how [G]sweet the [D]sound
+That saved a wretch like [A]me
+{end_of_verse}
+```
+
+Supported file extensions: `.cho`, `.chordpro`, `.chopro`, `.crd`
+
+### OpenLyrics XML (Structured)
+Standard XML format with rich metadata support:
+
+```xml
+<song xmlns="http://openlyrics.info/namespace/2009/song">
+  <properties>
+    <titles><title>Amazing Grace</title></titles>
+  </properties>
+  <lyrics>
+    <verse name="v1">
+      <lines>Amazing <chord root="D"/>grace...</lines>
+    </verse>
+  </lyrics>
+</song>
+```
+
+**The tool automatically detects the format** based on file extension!
 
 ## Installation
 

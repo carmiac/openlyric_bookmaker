@@ -6,6 +6,7 @@ from pathlib import Path
 
 from openlyric_bookmaker.config import get_file_list, load_config
 from openlyric_bookmaker.parsers.openlyrics import OpenLyricsParser
+from openlyric_bookmaker.parsers.chordpro import ChordProParser
 from openlyric_bookmaker.renderers.html import HTMLRenderer
 from openlyric_bookmaker.renderers.latex import LaTeXRenderer
 from openlyric_bookmaker.compilers.pdf import PDFCompiler
@@ -80,7 +81,6 @@ class SongBookBuilder:
             Dictionary mapping section names to lists of parsed Song objects
         """
         sections = {}
-        parser = OpenLyricsParser()
 
         for section_name, section_config in self.config["sections"].items():
             logger.info("Parsing section: %s", section_name)
@@ -98,21 +98,52 @@ class SongBookBuilder:
             for file_path in files:
                 try:
                     logger.debug("Parsing %s", file_path)
-                    song = parser.parse_file(file_path)
+                    song = self._parse_song_file(file_path)
 
                     # Validate song
                     errors = song.validate()
                     if errors:
-                        logger.warning("Validation errors in %s: {errors}", file_path)
+                        logger.warning("Validation errors in %s: %s", file_path, errors)
 
                     songs.append(song)
                 except Exception as e:
-                    logger.error("Error parsing %s: {e}", file_path)
+                    logger.error("Error parsing %s: %s", file_path, e)
 
             sections[section_name] = songs
-            logger.info("Parsed %s songs in section {section_name}", len(songs))
+            logger.info("Parsed %s songs in section %s", len(songs), section_name)
 
         return sections
+
+    def _parse_song_file(self, file_path: Path):
+        """Parse a song file using the appropriate parser based on file extension.
+
+        Args:
+            file_path: Path to the song file
+
+        Returns:
+            Parsed Song object
+        """
+        # Detect format based on file extension
+        suffix = file_path.suffix.lower()
+
+        if suffix in {".cho", ".chordpro", ".chopro", ".crd", ".txt"}:
+            # ChordPro format
+            logger.debug("Using ChordPro parser for %s", file_path)
+            parser = ChordProParser(file_path)
+            return parser.parse()
+        elif suffix == ".xml":
+            # OpenLyrics XML format
+            logger.debug("Using OpenLyrics parser for %s", file_path)
+            parser = OpenLyricsParser()
+            return parser.parse_file(file_path)
+        else:
+            # Default to OpenLyrics for backward compatibility
+            logger.warning(
+                "Unknown file extension %s, defaulting to OpenLyrics parser",
+                suffix,
+            )
+            parser = OpenLyricsParser()
+            return parser.parse_file(file_path)
 
     def _build_html(self, format_name: str, format_config: dict, sections: dict[str, list]) -> None:
         """Build HTML output.
