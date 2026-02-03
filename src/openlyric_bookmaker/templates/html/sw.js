@@ -1,4 +1,8 @@
 // Service Worker for Progressive Web App
+// Strategy: Stale-While-Revalidate
+//   - Serves cached content immediately (fast!)
+//   - Fetches fresh content in background
+//   - Updates cache for next visit
 const CACHE_NAME = 'songbook-v1';
 const STATIC_CACHE = 'songbook-static-v1';
 
@@ -39,42 +43,35 @@ self.addEventListener('activate', (event) => {
     );
 });
 
-// Fetch event - serve from cache when offline
+// Fetch event - stale-while-revalidate strategy
 self.addEventListener('fetch', (event) => {
     event.respondWith(
-        caches.match(event.request)
-            .then((response) => {
-                // Return cached version or fetch from network
-                if (response) {
-                    return response;
-                }
-
-                // Clone the request
-                const fetchRequest = event.request.clone();
-
-                return fetch(fetchRequest).then((response) => {
-                    // Check if valid response
-                    if (!response || response.status !== 200 || response.type !== 'basic') {
-                        return response;
+        caches.open(CACHE_NAME).then((cache) => {
+            return cache.match(event.request).then((cachedResponse) => {
+                // Fetch fresh version in background
+                const fetchPromise = fetch(event.request).then((networkResponse) => {
+                    // Update cache with fresh version
+                    if (networkResponse && networkResponse.status === 200) {
+                        cache.put(event.request, networkResponse.clone());
                     }
-
-                    // Clone the response
-                    const responseToCache = response.clone();
-
-                    // Cache the fetched file
-                    caches.open(CACHE_NAME)
-                        .then((cache) => {
-                            cache.put(event.request, responseToCache);
-                        });
-
-                    return response;
+                    return networkResponse;
+                }).catch(() => {
+                    // Network failed, but we have cache
+                    return cachedResponse;
                 });
-            })
-            .catch(() => {
-                // Return a custom offline page if available
+
+                // Return cached version immediately (fast!), 
+                // but background fetch will update cache for next time
+                return cachedResponse || fetchPromise;
+            });
+        }).catch(() => {
+            // Cache failed, try network only
+            return fetch(event.request).catch(() => {
+                // Both failed - if navigating, show offline page
                 if (event.request.mode === 'navigate') {
                     return caches.match('./index.html');
                 }
-            })
+            });
+        })
     );
 });
