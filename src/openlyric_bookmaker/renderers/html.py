@@ -59,7 +59,11 @@ class HTMLRenderer:
         return template.render(title=title, sections=sections, config=songbook_config)
 
     def render_manifest(
-        self, title: str, description: str = "", short_title: str | None = None, start_url: str | None = None
+        self,
+        title: str,
+        description: str = "",
+        short_title: str | None = None,
+        start_url: str | None = None,
     ) -> str:
         """Render the PWA manifest file.
 

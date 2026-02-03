@@ -252,10 +252,17 @@ class SongBookBuilder:
         (output_dir / "manifest.json").write_text(manifest_json, encoding="utf-8")
 
         # Render service worker with list of all song files for pre-caching
-        song_files = [song.source_file.stem + ".html" for songs_list in sections.values() for song in songs_list]
+        song_files = [
+            song.source_file.stem + ".html"
+            for songs_list in sections.values()
+            for song in songs_list
+        ]
         sw_content = renderer.render_service_worker(song_files)
         (output_dir / "sw.js").write_text(sw_content, encoding="utf-8")
-        logger.info("Added PWA support (manifest.json and service worker with %d songs pre-cached)", len(song_files))
+        logger.info(
+            "Added PWA support (manifest.json and service worker with %d songs pre-cached)",
+            len(song_files),
+        )
 
         logger.info("HTML build complete: %s songs rendered", len(sum(sections.values(), [])))
 
