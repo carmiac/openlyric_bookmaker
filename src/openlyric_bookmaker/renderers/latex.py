@@ -12,27 +12,27 @@ logger = logging.getLogger(__name__)
 
 def latex_escape(text: str) -> str:
     """Escape special LaTeX characters in text.
-    
+
     Args:
         text: Text to escape
-        
+
     Returns:
         Escaped text safe for LaTeX
     """
     # Order matters - backslash must be done first, but we handle it differently
     # to avoid double-escaping
-    text = text.replace('\\', r'\textbackslash{}')
+    text = text.replace("\\", r"\textbackslash{}")
     # Now handle other special characters
     replacements = {
-        '&': r'\&',
-        '%': r'\%',
-        '$': r'\$',
-        '#': r'\#',
-        '_': r'\_',
-        '{': r'\{',
-        '}': r'\}',
-        '~': r'\textasciitilde{}',
-        '^': r'\textasciicircum{}',
+        "&": r"\&",
+        "%": r"\%",
+        "$": r"\$",
+        "#": r"\#",
+        "_": r"\_",
+        "{": r"\{",
+        "}": r"\}",
+        "~": r"\textasciitilde{}",
+        "^": r"\textasciicircum{}",
     }
     for char, replacement in replacements.items():
         text = text.replace(char, replacement)
@@ -73,9 +73,9 @@ class LaTeXRenderer:
                 lstrip_blocks=True,
                 autoescape=False,
             )
-        
+
         # Add LaTeX escape filter
-        self.env.filters['latex_escape'] = latex_escape
+        self.env.filters["latex_escape"] = latex_escape
 
     def render_song(self, song: Song) -> str:
         """Render a single song to LaTeX .sbd format.
