@@ -112,9 +112,17 @@ def get_file_list(file_patterns: list[str | Path], base_path: Path) -> list[Path
         if path.is_file():
             files.append(path)
         elif path.is_dir():
-            # Get all .xml files in directory
+            # Get all song files in directory (OpenLyrics XML and ChordPro formats)
             xml_files = sorted(path.glob("*.xml"))
+            cho_files = sorted(path.glob("*.cho"))
+            chordpro_files = sorted(path.glob("*.chordpro"))
+            chopro_files = sorted(path.glob("*.chopro"))
+            crd_files = sorted(path.glob("*.crd"))
             files.extend(xml_files)
+            files.extend(cho_files)
+            files.extend(chordpro_files)
+            files.extend(chopro_files)
+            files.extend(crd_files)
         else:
             logger.warning("Path not found: %s", path)
 

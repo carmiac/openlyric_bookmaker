@@ -106,6 +106,7 @@ class ChordProParser:
             properties=self.properties,
             verses=self.verses,
             recordings=self.recordings,
+            source_file=self.file_path,
         )
 
         logger.info(
