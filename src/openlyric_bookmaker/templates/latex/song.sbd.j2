@@ -1,7 +1,7 @@
 % Song: {{ song.title }}
-\beginsong{ {{- song.title -}} }[
+\beginsong{ {{- song.title|latex_escape -}} }[
 {%- if song.authors %}
-by={ {{- song.properties.author_string -}} },
+by={ {{- song.properties.author_string|latex_escape -}} },
 {%- endif %}
 {%- if song.properties.titles|length > 1 %}
 {%- for title in song.properties.titles[1:] %}
