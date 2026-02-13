@@ -133,8 +133,7 @@ class TestOpenLyricsParser:
         """Test parsing a minimal song with only required fields."""
         # Create minimal XML
         minimal_xml = fixtures_dir / "minimal.xml"
-        minimal_xml.write_text(
-            """<?xml version="1.0" encoding="UTF-8"?>
+        minimal_xml.write_text("""<?xml version="1.0" encoding="UTF-8"?>
 <song xmlns="http://openlyrics.info/namespace/2009/song">
   <properties>
     <titles>
@@ -148,8 +147,7 @@ class TestOpenLyricsParser:
       </lines>
     </verse>
   </lyrics>
-</song>"""
-        )
+</song>""")
 
         song = OpenLyricsParser.parse_file(minimal_xml)
 
@@ -162,8 +160,7 @@ class TestOpenLyricsParser:
         """Test parsing recording metadata (extension to OpenLyrics)."""
         # Create XML with recordings
         recording_xml = fixtures_dir / "with_recordings.xml"
-        recording_xml.write_text(
-            """<?xml version="1.0" encoding="UTF-8"?>
+        recording_xml.write_text("""<?xml version="1.0" encoding="UTF-8"?>
 <song xmlns="http://openlyrics.info/namespace/2009/song">
   <properties>
     <titles>
@@ -187,8 +184,7 @@ class TestOpenLyricsParser:
       <lines><line>Test</line></lines>
     </verse>
   </lyrics>
-</song>"""
-        )
+</song>""")
 
         song = OpenLyricsParser.parse_file(recording_xml)
 
