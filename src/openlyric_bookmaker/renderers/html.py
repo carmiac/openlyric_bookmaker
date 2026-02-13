@@ -30,17 +30,18 @@ class HTMLRenderer:
         # Add custom filters
         self.env.filters["chord_display"] = self._format_chord
 
-    def render_song(self, song: Song) -> str:
+    def render_song(self, song: Song, songbook_config: dict | None = None) -> str:
         """Render a single song to HTML.
 
         Args:
             song: The song to render
+            songbook_config: Optional songbook configuration (for edit links, etc.)
 
         Returns:
             HTML string for the song
         """
         template = self.env.get_template("song.html.j2")
-        return template.render(song=song)
+        return template.render(song=song, config=songbook_config or {})
 
     def render_index(
         self, title: str, sections: dict[str, list[dict]], songbook_config: dict

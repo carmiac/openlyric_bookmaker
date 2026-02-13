@@ -6,6 +6,8 @@
     <meta name="description" content="{{ song.properties.titles[0] }}">
     <meta name="theme-color" content="#009688">
     <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="../stylesheets/w3.css">
+    <link rel="stylesheet" href="../stylesheets/custom-theme.css">
     <title>{{ song.title }}</title>
     <style>
         /* CSS Variables for theming */
@@ -191,6 +193,42 @@
         .recording-link a:hover {
             text-decoration: underline;
         }
+        .edit-buttons {
+            margin: 1.5em 0;
+            padding: 1em;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            display: flex;
+            gap: 1em;
+            flex-wrap: wrap;
+        }
+        .edit-button {
+            padding: 0.5em 1em;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            text-decoration: none;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            transition: all 0.2s;
+            font-size: 0.9em;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5em;
+        }
+        .edit-button:hover {
+            background: var(--bg-secondary);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        @media (max-width: 768px) {
+            .edit-buttons {
+                flex-direction: column;
+            }
+            .edit-button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
         
         /* Print styles */
         @media print {
@@ -247,10 +285,11 @@
                 border-top: 1px solid #ccc;
             }
             
-            /* Hide media players in print, keep links */
+            /* Hide media players and edit buttons in print, keep links */
             .youtube-embed,
             .midi-player embed,
             .audio-player,
+            .edit-buttons,
             video {
                 display: none !important;
             }
@@ -409,6 +448,24 @@
                 </div>
             </div>
             {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if config.get('edit_github_repo') or config.get('edit_email') %}
+        <div class="edit-buttons">
+            {% if config.get('edit_github_repo') %}
+            <a href="https://github.com/{{ config.edit_github_repo }}/issues/new?title=Edit:%20{{ song.title|urlencode }}&body=**Song:**%20{{ song.title|urlencode }}%0A**File:**%20{{ song.source_file.name|urlencode }}%0A%0A**What%20needs%20to%20be%20changed:**%0A%0A**Suggested%20correction:**%0A" 
+               class="edit-button" 
+               target="_blank">
+                📝 Suggest Edit (GitHub)
+            </a>
+            {% endif %}
+            {% if config.get('edit_email') %}
+            <a href="mailto:{{ config.edit_email }}?subject=Song%20Edit:%20{{ song.title|urlencode }}&body=Song:%20{{ song.title|urlencode }}%0AFile:%20{{ song.source_file.name|urlencode }}%0A%0AEdit%20suggestion:%0A" 
+               class="edit-button">
+                ✉️ Email Correction
+            </a>
+            {% endif %}
         </div>
         {% endif %}
     </div>

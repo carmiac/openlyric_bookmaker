@@ -207,7 +207,7 @@ class SongBookBuilder:
             song_list = []
             for song in songs:
                 # Render song to HTML
-                html = renderer.render_song(song)
+                html = renderer.render_song(song, self.config["songbook"])
 
                 # Write to file
                 song_filename = f"{song.source_file.stem}.html"
