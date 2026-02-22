@@ -104,7 +104,7 @@
 
     {% if intro %}
     <div class="introduction">
-        {{ intro }}
+        {{ intro | safe }}
     </div>
     {% endif %}
 </body>
