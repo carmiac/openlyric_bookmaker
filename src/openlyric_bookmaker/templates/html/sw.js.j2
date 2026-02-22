@@ -4,8 +4,11 @@
 //   - Serves cached content immediately (fast!)
 //   - Fetches fresh content in background
 //   - Updates cache for next visit
-const CACHE_NAME = 'songbook-v1';
-const STATIC_CACHE = 'songbook-static-v1';
+// Build timestamp is injected at build time so each deployment
+// gets a new cache name, forcing old caches to be cleared.
+const BUILD_TIMESTAMP = '{{ build_timestamp }}';
+const CACHE_NAME = 'songbook-' + BUILD_TIMESTAMP;
+const STATIC_CACHE = 'songbook-static-' + BUILD_TIMESTAMP;
 
 // Files to cache immediately on install
 const STATIC_FILES = [
