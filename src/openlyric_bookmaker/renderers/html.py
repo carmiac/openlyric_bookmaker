@@ -95,6 +95,7 @@ class HTMLRenderer:
             JavaScript service worker code
         """
         import datetime
+
         build_timestamp = datetime.datetime.utcnow().strftime("%Y%m%d%H%M%S")
         template = self.env.get_template("sw.js.j2")
         return template.render(song_files=song_files, build_timestamp=build_timestamp)

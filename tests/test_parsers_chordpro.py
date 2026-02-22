@@ -12,13 +12,15 @@ class TestChordProParser:
     def test_parse_basic_song(self, tmp_path):
         """Test parsing a basic ChordPro song."""
         song_file = tmp_path / "test.cho"
-        song_file.write_text("""{title: Test Song}
+        song_file.write_text(
+            """{title: Test Song}
 {artist: Test Artist}
 
 {start_of_verse}
 This is a [C]test
 {end_of_verse}
-""")
+"""
+        )
 
         parser = ChordProParser(song_file)
         song = parser.parse()
@@ -30,12 +32,14 @@ This is a [C]test
     def test_parse_inline_chords(self, tmp_path):
         """Test parsing inline chord notation."""
         song_file = tmp_path / "test.cho"
-        song_file.write_text("""{title: Chord Test}
+        song_file.write_text(
+            """{title: Chord Test}
 
 {start_of_verse}
 Amazing [D]grace how [G]sweet the [D]sound
 {end_of_verse}
-""")
+"""
+        )
 
         parser = ChordProParser(song_file)
         song = parser.parse()
@@ -51,12 +55,14 @@ Amazing [D]grace how [G]sweet the [D]sound
     def test_parse_chord_structures(self, tmp_path):
         """Test parsing chords with structures (m, 7, maj7, etc.)."""
         song_file = tmp_path / "test.cho"
-        song_file.write_text("""{title: Complex Chords}
+        song_file.write_text(
+            """{title: Complex Chords}
 
 {start_of_verse}
 Test [Dm]minor and [G7]seventh and [Cmaj7]major seventh
 {end_of_verse}
-""")
+"""
+        )
 
         parser = ChordProParser(song_file)
         song = parser.parse()
@@ -77,7 +83,8 @@ Test [Dm]minor and [G7]seventh and [Cmaj7]major seventh
     def test_parse_multiple_verses(self, tmp_path):
         """Test parsing multiple verses."""
         song_file = tmp_path / "test.cho"
-        song_file.write_text("""{title: Multi-Verse}
+        song_file.write_text(
+            """{title: Multi-Verse}
 
 {start_of_verse}
 Verse one
@@ -90,7 +97,8 @@ Verse two
 {start_of_chorus}
 Chorus here
 {end_of_chorus}
-""")
+"""
+        )
 
         parser = ChordProParser(song_file)
         song = parser.parse()
@@ -106,7 +114,8 @@ Chorus here
     def test_parse_directives(self, tmp_path):
         """Test parsing various directives."""
         song_file = tmp_path / "test.cho"
-        song_file.write_text("""{title: Directive Test}
+        song_file.write_text(
+            """{title: Directive Test}
 {composer: John Doe}
 {copyright: 2026}
 {ccli: 12345}
@@ -115,7 +124,8 @@ Chorus here
 {start_of_verse}
 Test line
 {end_of_verse}
-""")
+"""
+        )
 
         parser = ChordProParser(song_file)
         song = parser.parse()
@@ -129,7 +139,8 @@ Test line
     def test_parse_short_directives(self, tmp_path):
         """Test parsing short directive forms."""
         song_file = tmp_path / "test.cho"
-        song_file.write_text("""{t: Short Title}
+        song_file.write_text(
+            """{t: Short Title}
 {st: Short Subtitle}
 {c: Comment}
 
@@ -140,7 +151,8 @@ Verse
 {soc}
 Chorus
 {eoc}
-""")
+"""
+        )
 
         parser = ChordProParser(song_file)
         song = parser.parse()
@@ -153,10 +165,12 @@ Chorus
     def test_parse_without_sections(self, tmp_path):
         """Test parsing lyrics without explicit section markers."""
         song_file = tmp_path / "test.cho"
-        song_file.write_text("""{title: Implicit Verse}
+        song_file.write_text(
+            """{title: Implicit Verse}
 
 This is a line [C]without section markers
-Another [G]line""")
+Another [G]line"""
+        )
 
         parser = ChordProParser(song_file)
         song = parser.parse()
@@ -169,14 +183,16 @@ Another [G]line""")
     def test_parse_empty_lines(self, tmp_path):
         """Test handling of empty lines in verses."""
         song_file = tmp_path / "test.cho"
-        song_file.write_text("""{title: Empty Lines}
+        song_file.write_text(
+            """{title: Empty Lines}
 
 {start_of_verse}
 Line one
 
 Line three
 {end_of_verse}
-""")
+"""
+        )
 
         parser = ChordProParser(song_file)
         song = parser.parse()
@@ -189,10 +205,12 @@ Line three
     def test_filename_as_fallback_title(self, tmp_path):
         """Test using filename as title when no title directive."""
         song_file = tmp_path / "my_awesome_song.cho"
-        song_file.write_text("""{start_of_verse}
+        song_file.write_text(
+            """{start_of_verse}
 No title directive
 {end_of_verse}
-""")
+"""
+        )
 
         parser = ChordProParser(song_file)
         song = parser.parse()
@@ -202,12 +220,14 @@ No title directive
     def test_parse_bridge(self, tmp_path):
         """Test parsing bridge sections."""
         song_file = tmp_path / "test.cho"
-        song_file.write_text("""{title: Bridge Test}
+        song_file.write_text(
+            """{title: Bridge Test}
 
 {start_of_bridge}
 Bridge content
 {end_of_bridge}
-""")
+"""
+        )
 
         parser = ChordProParser(song_file)
         song = parser.parse()
@@ -219,7 +239,8 @@ Bridge content
     def test_tab_sections_ignored(self, tmp_path):
         """Test that tab sections are ignored."""
         song_file = tmp_path / "test.cho"
-        song_file.write_text("""{title: Tab Test}
+        song_file.write_text(
+            """{title: Tab Test}
 
 {start_of_tab}
 E|---0---
@@ -229,7 +250,8 @@ B|---1---
 {start_of_verse}
 Lyrics here
 {end_of_verse}
-""")
+"""
+        )
 
         parser = ChordProParser(song_file)
         song = parser.parse()
@@ -241,13 +263,15 @@ Lyrics here
     def test_custom_alternate_title(self, tmp_path):
         """Test x-alt-title custom directive."""
         song_file = tmp_path / "test.cho"
-        song_file.write_text("""{title: Main Title}
+        song_file.write_text(
+            """{title: Main Title}
 {x-alt-title: Alternate Title}
 
 {start_of_verse}
 Test
 {end_of_verse}
-""")
+"""
+        )
 
         parser = ChordProParser(song_file)
         song = parser.parse()
@@ -258,13 +282,15 @@ Test
     def test_custom_tune_directive(self, tmp_path):
         """Test x-tune custom directive."""
         song_file = tmp_path / "test.cho"
-        song_file.write_text("""{title: Test Song}
+        song_file.write_text(
+            """{title: Test Song}
 {x-tune: NEW BRITAIN}
 
 {start_of_verse}
 Test
 {end_of_verse}
-""")
+"""
+        )
 
         parser = ChordProParser(song_file)
         song = parser.parse()
@@ -274,7 +300,8 @@ Test
     def test_custom_themes_and_keywords(self, tmp_path):
         """Test x-theme and x-keyword custom directives."""
         song_file = tmp_path / "test.cho"
-        song_file.write_text("""{title: Test Song}
+        song_file.write_text(
+            """{title: Test Song}
 {x-theme: Traditional}
 {x-theme: Hymns}
 {x-keyword: Grace}
@@ -283,7 +310,8 @@ Test
 {start_of_verse}
 Test
 {end_of_verse}
-""")
+"""
+        )
 
         parser = ChordProParser(song_file)
         song = parser.parse()
@@ -296,7 +324,8 @@ Test
     def test_custom_recording_metadata(self, tmp_path):
         """Test x-recording-* custom directives."""
         song_file = tmp_path / "test.cho"
-        song_file.write_text("""{title: Test Song}
+        song_file.write_text(
+            """{title: Test Song}
 {x-recording-url: https://youtube.com/watch?v=abc}
 {x-recording-title: Live Performance}
 {x-recording-artist: The Band}
@@ -304,7 +333,8 @@ Test
 {start_of_verse}
 Test
 {end_of_verse}
-""")
+"""
+        )
 
         parser = ChordProParser(song_file)
         song = parser.parse()
@@ -317,7 +347,8 @@ Test
     def test_multiple_recordings(self, tmp_path):
         """Test multiple recording entries."""
         song_file = tmp_path / "test.cho"
-        song_file.write_text("""{title: Test Song}
+        song_file.write_text(
+            """{title: Test Song}
 {x-recording-url: https://youtube.com/1}
 {x-recording-title: Version 1}
 {x-recording-url: https://youtube.com/2}
@@ -326,7 +357,8 @@ Test
 {start_of_verse}
 Test
 {end_of_verse}
-""")
+"""
+        )
 
         parser = ChordProParser(song_file)
         song = parser.parse()
